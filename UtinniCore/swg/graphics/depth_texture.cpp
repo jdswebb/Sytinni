@@ -24,6 +24,8 @@
 
 #include "utinni.h"
 #include "depth_texture.h"
+#include "../game/game.h"
+#include "../camera/camera.h"
 
 #include <d3dx9.h>
 #include <d3d9types.h>
@@ -237,5 +239,13 @@ void DepthTexture::resolveDepth()
 
 	 _pDevice->SetTexture(14, pTextureColor);
 	 _pDevice->SetTexture(15, pTextureDepth);
+
+     auto camera = utinni::Game::getCamera();
+     if (camera != nullptr) {
+         float nearFar[4];
+         nearFar[0] = camera->nearPlane;
+         nearFar[1] = camera->farPlane;
+		 _pDevice->SetPixelShaderConstantF(85, &nearFar[0], 1);
+     }
 }
 }
