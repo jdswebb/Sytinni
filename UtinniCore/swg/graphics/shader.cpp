@@ -22,39 +22,56 @@
  * SOFTWARE.
 **/
 
-#pragma once
+#include "shader.h"
+#include "swg/graphics/directx9.h"
 
-#include <string>
-#include <vector>
-#include <map>
-#include <unordered_map>
-
-#include "DetourXS/detourxs.h"
-
-#include "UtINI/utini.h"
-
-using swgptr = uint32_t;
-
-#include "utility/log.h"
-#include "utility/memory.h"
-#include "utility/utility.h"
-
-#ifdef EXPORT_UTINNI
-    #define UTINNI_API _declspec(dllexport)
-#else
-    #define UTINNI_API _declspec(dllimport)
-#endif
-
-namespace utinni
+namespace swg::shaderPrimitiveSorter
 {
-class PluginManager;
+
 }
 
-namespace utinni
+namespace utinni::shaderPrimitiveSorter
 {
-UTINNI_API extern const std::string& getPath();
-UTINNI_API extern const std::string& getSwgCfgFilename();
-UTINNI_API extern UtINI& getConfig();
-UTINNI_API extern PluginManager& getPluginManager();
-};
 
+
+directX::DepthTexture* depthTexture;
+
+int vecOffset = 0;
+constexpr uint8_t phaseStructSize = 36;
+constexpr swgptr midPopCell_Call = 0x772D60;
+constexpr swgptr start_midPopCell = 0x00773E39;
+constexpr swgptr return_midPopCell = 0x00773E41;
+__declspec(naked) void midPopCell()
+{
+    __asm
+    {
+        mov vecOffset, esi
+        pushad
+        pushfd
+        call midPopCell_Call
+    }
+
+    depthTexture = directX::getDepthTexture();
+    if ((vecOffset / phaseStructSize) == depthTexture->getStage()) // divide offset by struct size to get stage
+    {
+        if (depthTexture != nullptr && depthTexture->isSupported() && depthTexture->getTextureDepth() != nullptr)
+        {
+            depthTexture->resolveDepth();
+        }
+    }
+
+    __asm
+    {
+        popfd
+        popad
+        add esi, 0x24
+        jmp[return_midPopCell]
+    }
+}
+
+
+void detour()
+{
+    memory::createJMP(start_midPopCell, (swgptr)midPopCell, 6);
+}
+}

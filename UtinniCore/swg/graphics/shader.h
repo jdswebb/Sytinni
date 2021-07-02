@@ -24,37 +24,9 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
-#include <map>
-#include <unordered_map>
+#include "utinni.h"
 
-#include "DetourXS/detourxs.h"
-
-#include "UtINI/utini.h"
-
-using swgptr = uint32_t;
-
-#include "utility/log.h"
-#include "utility/memory.h"
-#include "utility/utility.h"
-
-#ifdef EXPORT_UTINNI
-    #define UTINNI_API _declspec(dllexport)
-#else
-    #define UTINNI_API _declspec(dllimport)
-#endif
-
-namespace utinni
+namespace utinni::shaderPrimitiveSorter
 {
-class PluginManager;
+void detour();
 }
-
-namespace utinni
-{
-UTINNI_API extern const std::string& getPath();
-UTINNI_API extern const std::string& getSwgCfgFilename();
-UTINNI_API extern UtINI& getConfig();
-UTINNI_API extern PluginManager& getPluginManager();
-};
-
