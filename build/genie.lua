@@ -147,11 +147,11 @@ solution (SOL_NAME)
         
         configuration "Release"
             postbuildcommands {
-                "xcopy /Y /E \"" .. SOL_DATA_DIR .. "\" " .. "\"" .. (SOL_BUILD_DIR .. TARGET_DIR .. "Release") .. "\""
+                "xcopy /Y /E /d \"" .. SOL_DATA_DIR .. "\" " .. "\"" .. (SOL_BUILD_DIR .. TARGET_DIR .. "Release") .. "\""
             }
         configuration "RelWithDebInfo"
             postbuildcommands {
-                "xcopy /Y /E \"" .. SOL_DATA_DIR .. "\" " .. "\"" .. (SOL_BUILD_DIR .. TARGET_DIR .. "RelWithDebInfo") .. "\""
+                "xcopy /Y /E /d \"" .. SOL_DATA_DIR .. "\" " .. "\"" .. (SOL_BUILD_DIR .. TARGET_DIR .. "RelWithDebInfo") .. "\""
             }
         
     project "sytners_toolbox"
