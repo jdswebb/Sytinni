@@ -40,18 +40,11 @@ const static UtINI::Value utinniSettings[] = {
     { "UtinniCore", "autoLoadScene", "false", UtINI::Value::vt_bool },
     { "UtinniCore", "autoLogin", "false", UtINI::Value::vt_bool },
     { "UtinniCore", "autoLoginUsername", "Local", UtINI::Value::vt_string },
+    { "UtinniCore", "plugins", "sytners_toolbox", UtINI::Value::vt_string },
 
     // Log settings
     { "Log", "writeClassName", "false", UtINI::Value::vt_bool },
     { "Log", "writeFunctionName", "false", UtINI::Value::vt_bool },
-
-    // Editor settings
-    { "Editor", "enableEditorMode", "true", UtINI::Value::vt_bool },
-    { "Editor", "defaultPluginPanel", "Main Controls", UtINI::Value::vt_string },
-    { "Editor", "autoOpenLogWindow", "false", UtINI::Value::vt_bool },
-    { "Editor", "width", "1200", UtINI::Value::vt_int },
-    { "Editor", "height", "500", UtINI::Value::vt_int },
-
 };
 
 struct UtINI::Impl

@@ -60,21 +60,30 @@ namespace utinni
         while (std::getline(f, s, ',')) {
             plugins.push_back(s);
         }
-
+       
         for (auto p : plugins)
         {
+            log::info("Loading plugin:");
+            log::info((p + ".dll").c_str());
+
             // Try to load the found .dll so that it that the createPlugin function can be looked up
-            const HINSTANCE hDllInstance = LoadLibrary(p.c_str());
+            const HINSTANCE hDllInstance = LoadLibrary((getPath() + p + ".dll").c_str());
             if (hDllInstance != nullptr)
             {
+                log::info("Plugin instance created");
+
                 // Check if it is a valid UtinniPlugin, which contains the createPlugin function
                 const auto createPlugin = (pCreatePlugin)GetProcAddress(hDllInstance, "createPlugin");
                 if (createPlugin != nullptr)
                 {
+                    log::info("Plugin created");
+
                     // If the function exists in the dll, call the createPlugin function and emplace it in the plugin manager plugin list
                     UtinniPlugin* plugin = createPlugin();
                     if (plugin != nullptr)
                     {
+                        log::info("Plugin added");
+                        plugin->init();
                         pImpl->plugins.emplace_back(plugin);
                     }
                 }

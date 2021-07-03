@@ -40,6 +40,7 @@
 #include "swg/graphics/directx9.h"
 #include "swg/game/game.h"
 #include "swg/scene/render_world.h"
+#include "utility/log.h"
 
 using namespace utinni;
 using namespace swg::math;
@@ -219,7 +220,8 @@ bool isRendering()
 
 void addRenderCallback(void(*func)())
 {
-	  renderCallbacks.emplace_back(func);
+    log::info("Adding callback");
+	renderCallbacks.emplace_back(func);
 }
 
 }

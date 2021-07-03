@@ -40,8 +40,7 @@ namespace utinni
         UtinniPlugin() {};
         virtual ~UtinniPlugin() {}
 
-        virtual void init() {}
-
+        virtual void init() = 0;
         virtual const Information& getInformation() const = 0;
     };
 }

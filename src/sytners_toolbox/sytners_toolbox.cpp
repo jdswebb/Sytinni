@@ -75,20 +75,20 @@ void SytnersUtinniUI()
     static bool showDepthWindow = false;
     static bool showColorWindow = false;
 
+    ImGui::GetStyle().Colors[ImGuiCol_WindowBg].w = 0.6f;
+    ImGui::GetStyle().ItemSpacing.y = 1.0f;
+    ImGui::GetStyle().FramePadding.y = 1.0f;
+
     ImGui::Begin("Tests", 0, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse); // ImVec2(250, 300), 0.9f,  ImGuiWindowFlags_NoResize |
     {
         auto camera = Game::getCamera();
         if (camera != nullptr)
         {
             auto transform = camera->getTransform();
-
-            // ImGui::DragFloat3();
+            swg::math::Vector pos;
+         
         }
 
-        if (ImGui::Button("Warp"))
-        {
-            //CuiMediatorFactory::activate("Testzzz");
-        }
 
         auto depthTex = directX::getDepthTexture();
         if (depthTex != nullptr)
