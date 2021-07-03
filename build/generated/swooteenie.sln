@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2019
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "launcher", "launcher.vcxproj", "{7748346B-6315-8F76-8C2E-7D1E785AC404}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2580880B-9189-887C-1A05-9F7C860D947C} = {2580880B-9189-887C-1A05-9F7C860D947C}
+		{4E40957C-3A77-960D-E363-7C10CF79120F} = {4E40957C-3A77-960D-E363-7C10CF79120F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ini", "ini.vcxproj", "{2580880B-9189-887C-1A05-9F7C860D947C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core", "core.vcxproj", "{4E40957C-3A77-960D-E363-7C10CF79120F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2580880B-9189-887C-1A05-9F7C860D947C} = {2580880B-9189-887C-1A05-9F7C860D947C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sytners_toolbox", "sytners_toolbox.vcxproj", "{63BF3B4A-CF4A-A90E-D85B-2C034466050F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2580880B-9189-887C-1A05-9F7C860D947C} = {2580880B-9189-887C-1A05-9F7C860D947C}
+		{4E40957C-3A77-960D-E363-7C10CF79120F} = {4E40957C-3A77-960D-E363-7C10CF79120F}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Release|Win32 = Release|Win32
+		RelWithDebInfo|Win32 = RelWithDebInfo|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7748346B-6315-8F76-8C2E-7D1E785AC404}.Release|Win32.ActiveCfg = Release|Win32
+		{7748346B-6315-8F76-8C2E-7D1E785AC404}.Release|Win32.Build.0 = Release|Win32
+		{7748346B-6315-8F76-8C2E-7D1E785AC404}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
+		{7748346B-6315-8F76-8C2E-7D1E785AC404}.RelWithDebInfo|Win32.Build.0 = RelWithDebInfo|Win32
+		{2580880B-9189-887C-1A05-9F7C860D947C}.Release|Win32.ActiveCfg = Release|Win32
+		{2580880B-9189-887C-1A05-9F7C860D947C}.Release|Win32.Build.0 = Release|Win32
+		{2580880B-9189-887C-1A05-9F7C860D947C}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
+		{2580880B-9189-887C-1A05-9F7C860D947C}.RelWithDebInfo|Win32.Build.0 = RelWithDebInfo|Win32
+		{4E40957C-3A77-960D-E363-7C10CF79120F}.Release|Win32.ActiveCfg = Release|Win32
+		{4E40957C-3A77-960D-E363-7C10CF79120F}.Release|Win32.Build.0 = Release|Win32
+		{4E40957C-3A77-960D-E363-7C10CF79120F}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
+		{4E40957C-3A77-960D-E363-7C10CF79120F}.RelWithDebInfo|Win32.Build.0 = RelWithDebInfo|Win32
+		{63BF3B4A-CF4A-A90E-D85B-2C034466050F}.Release|Win32.ActiveCfg = Release|Win32
+		{63BF3B4A-CF4A-A90E-D85B-2C034466050F}.Release|Win32.Build.0 = Release|Win32
+		{63BF3B4A-CF4A-A90E-D85B-2C034466050F}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
+		{63BF3B4A-CF4A-A90E-D85B-2C034466050F}.RelWithDebInfo|Win32.Build.0 = RelWithDebInfo|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+EndGlobal

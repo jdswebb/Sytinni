@@ -245,7 +245,7 @@ namespace INI
     // Replace every occurrence of @param what to @param ret in @param str
     static inline std::string& str_replace(std::string& str, const std::string& what, const std::string& rep)
     {
-        int diff = rep.size() - what.size() + 1;
+        int diff = static_cast<int>(rep.size() - what.size() + 1);
         for (size_t pos = 0; ;pos += diff)
         {
             pos = str.find(what.c_str(),pos);
