@@ -176,7 +176,7 @@ void inject(PROCESS_INFORMATION procInfo)
     std::string currentDir = std::string(curDirBuffer);
     currentDir = currentDir.substr(0, currentDir.find_last_of('\\') + 1);
 
-    std::string dllFilename = currentDir + "core.dll";
+    std::string dllFilename = currentDir + "utinni_core.dll";
     LPVOID lpMemory = (LPVOID)VirtualAllocEx(procInfo.hProcess, nullptr, dllFilename.length(), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
     WriteProcessMemory(procInfo.hProcess, lpMemory, (LPVOID)dllFilename.c_str(), dllFilename.length(), nullptr);
 

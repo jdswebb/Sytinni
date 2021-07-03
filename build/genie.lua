@@ -120,7 +120,7 @@ solution (SOL_NAME)
             SYTINNI_ROOT .. "/ini/**.cpp"
         }
     
-    project "core"
+    project "utinni_core"
         commonBuild()
         kind "SharedLib"
         
@@ -160,7 +160,7 @@ solution (SOL_NAME)
         
         defines { "BUILDING_SUT" }
         
-        links { "core", "ini" }
+        links { "utinni_core", "ini" }
         
         includedirs {
             SYTINNI_ROOT .. "/core"
