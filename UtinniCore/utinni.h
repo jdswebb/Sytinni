@@ -40,9 +40,9 @@ using swgptr = uint32_t;
 #include "utility/utility.h"
 
 #ifdef EXPORT_UTINNI
-    #define UTINNI_API _declspec(dllexport)
+    #define UTINNI_API __declspec(dllexport)
 #else
-    #define UTINNI_API _declspec(dllimport)
+    #define UTINNI_API __declspec(dllimport)
 #endif
 
 namespace utinni
