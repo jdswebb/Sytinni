@@ -34,7 +34,7 @@ const static UtINI::Value utinniSettings[] = {
     { "Launcher", "swgClientPath", "", UtINI::Value::vt_string },
 
     // UtinniCore settings
-    { "UtinniCore", "enableInternalUi", "false", UtINI::Value::vt_bool },
+    { "UtinniCore", "enableInternalUi", "true", UtINI::Value::vt_bool },
     { "UtinniCore", "enableOfflineScenes", "false", UtINI::Value::vt_bool },
     { "UtinniCore", "useSwgOverrideCfg", "false", UtINI::Value::vt_bool },
     { "UtinniCore", "autoLoadScene", "false", UtINI::Value::vt_bool },
