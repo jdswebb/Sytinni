@@ -1,8 +1,8 @@
 local SRC_ROOT = "../src/"
 local DATA_ROOT = "../data"
-local SWOOTEENIE_ROOT = "../src/"
+local SYTINNI_ROOT = "../src/"
 local EXT_ROOT = "../external/"
-local SOL_NAME = "swooteenie"
+local SOL_NAME = "sytinni"
 local SOL_EXT_DIR = "$(SolutionDir)..\\..\\external\\"
 local SOL_DATA_DIR = "$(SolutionDir)..\\..\\data"
 local SOL_BUILD_DIR = "$(SolutionDir)..\\..\\build\\"
@@ -55,8 +55,8 @@ function commonIncludeDirs()
     -- common includes
     includedirs {
         SRC_ROOT, 
-        SWOOTEENIE_ROOT,
-        SWOOTEENIE_ROOT .. "/modules/",
+        SYTINNI_ROOT,
+        SYTINNI_ROOT .. "/modules/",
         EXT_ROOT,
         DATA_ROOT
     }
@@ -102,11 +102,11 @@ solution (SOL_NAME)
         links { "ini" }
         
         includedirs {
-            SWOOTEENIE_ROOT .. "/core"
+            SYTINNI_ROOT .. "/core"
         }
         files {
-            SWOOTEENIE_ROOT .. "/launcher/**.h",
-            SWOOTEENIE_ROOT .. "/launcher/**.cpp"
+            SYTINNI_ROOT .. "/launcher/**.h",
+            SYTINNI_ROOT .. "/launcher/**.cpp"
         }
         
     project "ini"
@@ -116,8 +116,8 @@ solution (SOL_NAME)
         defines { "BUILDING_INI" }
                 
         files {
-            SWOOTEENIE_ROOT .. "/ini/**.h",
-            SWOOTEENIE_ROOT .. "/ini/**.cpp"
+            SYTINNI_ROOT .. "/ini/**.h",
+            SYTINNI_ROOT .. "/ini/**.cpp"
         }
     
     project "core"
@@ -132,13 +132,13 @@ solution (SOL_NAME)
         links { "ini", "nvapi" }
         
         includedirs {
-            SWOOTEENIE_ROOT .. "/core",
+            SYTINNI_ROOT .. "/core",
             EXT_ROOT
         }
         files {
-            SWOOTEENIE_ROOT .. "/core/**.h",
-            SWOOTEENIE_ROOT .. "/core/**.cpp",
-            SWOOTEENIE_ROOT .. "/core/**.rc",
+            SYTINNI_ROOT .. "/core/**.h",
+            SYTINNI_ROOT .. "/core/**.cpp",
+            SYTINNI_ROOT .. "/core/**.rc",
             EXT_ROOT .. "/ImGuizmo/**.h",
             EXT_ROOT .. "/ImGuizmo/**.cpp",
             EXT_ROOT .. "/DetourXS/**.h",
@@ -163,9 +163,9 @@ solution (SOL_NAME)
         links { "core", "ini" }
         
         includedirs {
-            SWOOTEENIE_ROOT .. "/core"
+            SYTINNI_ROOT .. "/core"
         }
         files {
-            SWOOTEENIE_ROOT .. "/sytners_toolbox/**.h",
-            SWOOTEENIE_ROOT .. "/sytners_toolbox/**.cpp"
+            SYTINNI_ROOT .. "/sytners_toolbox/**.h",
+            SYTINNI_ROOT .. "/sytners_toolbox/**.cpp"
         }
