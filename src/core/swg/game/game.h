@@ -26,41 +26,70 @@
 
 #include "utinni.h"
 #include "swg/misc/repository.h"
+#include <functional>
 
 namespace utinni
 {
 class Camera;
 class Object;
 
-class UTINNI_API Game
+namespace Game
 {
-public:
-    static void addInstallCallback(void(*func)());
-    static void addPreMainLoopCallback(void(*func)());
-    static void addMainLoopCallback(void(*func)());
-    static void addSetSceneCallback(void(*func)());
-    static void addCleanupSceneCallback(void(*func)());
+    extern UTINNI_API std::vector<std::function<void()>> installCallbacks;
+    extern UTINNI_API std::vector<std::function<void()>> preMainLoopCallbacks;
+    extern UTINNI_API std::vector<std::function<void()>> mainLoopCallbacks;
+    extern UTINNI_API std::vector<std::function<void()>> setSceneCallbacks;
+    extern UTINNI_API std::vector<std::function<void()>> cleanUpSceneCallbacks;
 
-    static void detour();
-    static void quit();
+    template<typename T>
+    void addInstallCallback(T func)
+    {
+        installCallbacks.emplace_back(func);
+    }
 
-    static bool isRunning();
+    template<typename T>
+    void addPreMainLoopCallback(T func)
+    {
+        preMainLoopCallbacks.emplace_back(func);
+    }
 
-    static void loadScene();
-    static void loadScene(const char* terrainFilename, const char* avatarObjectFilename = "object/creature/player/shared_human_male.iff");
-    static void cleanupScene();
+    template<typename T>
+    void addMainLoopCallback(T func)
+    {
+        mainLoopCallbacks.emplace_back(func);
+    }
 
-    static Repository* getRepository();
+    template<typename T>
+    void addSetSceneCallback(T func)
+    {
+        setSceneCallbacks.emplace_back(func);
+    }
 
-    static Object* getPlayer();
-    static Object* getPlayerCreatureObject();
-    static swgptr getPlayerLookAtTargetObjectNetworkId();
-    static Object* getPlayerLookAtTargetObject();
+    template<typename T>
+    void addCleanupSceneCallback(T func)
+    {
+        cleanUpSceneCallbacks.emplace_back(func);
+    }
+        
+    UTINNI_API void detour();
+    UTINNI_API void quit();
 
-    static Camera* getCamera();
-    static const Camera* getConstCamera();
+    UTINNI_API bool isRunning();
 
-    static bool isSafeToUse();
+    UTINNI_API void loadScene();
+    UTINNI_API void loadScene(const char* terrainFilename, const char* avatarObjectFilename = "object/creature/player/shared_human_male.iff");
+    UTINNI_API void cleanupScene();
 
+    UTINNI_API Repository*  getRepository();
+
+    UTINNI_API Object* getPlayer();
+    UTINNI_API Object* getPlayerCreatureObject();
+    UTINNI_API swgptr getPlayerLookAtTargetObjectNetworkId();
+    UTINNI_API Object* getPlayerLookAtTargetObject();
+
+    UTINNI_API Camera* getCamera();
+    UTINNI_API const Camera*  getConstCamera();
+
+    UTINNI_API bool isSafeToUse();
 };
 }

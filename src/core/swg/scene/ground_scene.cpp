@@ -62,11 +62,6 @@ pHandleInputMapEvent handleInputMapEvent = (pHandleInputMapEvent)0x0051AA40;
 pInit init = (pInit)0x00518EB0;
 }
 
-static std::vector<void(*)(utinni::GroundScene* pThis)> preDrawLoopCallbacks;
-static std::vector<void(*)(utinni::GroundScene* pThis)> postDrawLoopCallbacks;
-static std::vector<void(*)(utinni::GroundScene* pThis, float time)> updateLoopCallbacks;
-static std::vector<void(*)()> cameraChangeCallbacks;
-
 namespace utinni
 {
 GroundScene* GroundScene::get() // Static GroundScene Pointer
@@ -99,45 +94,32 @@ std::string GroundScene::getName()
     return terrainPath.substr(i, length);
 }
 
-void GroundScene::addPreDrawLoopCallback(void(*func)(GroundScene* pThis))
+namespace GroundSceneNamespace
 {
-    preDrawLoopCallbacks.emplace_back(func);
-
-}
-
-void GroundScene::addPostDrawLoopCallback(void(*func)(GroundScene* pThis))
-{
-    postDrawLoopCallbacks.emplace_back(func);
+std::vector<std::function<void(utinni::GroundScene* pThis)>> preDrawLoopCallbacks;
+std::vector<std::function<void(utinni::GroundScene* pThis)>> postDrawLoopCallbacks;
+std::vector<std::function<void(utinni::GroundScene* pThis, float time)>> updateLoopCallbacks;
+std::vector<std::function<void()>> cameraChangeCallbacks;
 }
 
 void __fastcall hkDrawLoop(GroundScene* pThis, DWORD EDX)
 {
-    for (const auto& func : preDrawLoopCallbacks)
+    for (const auto& func : GroundSceneNamespace::preDrawLoopCallbacks)
     {
         func(pThis);
     }
 
     swg::groundScene::draw(pThis);
 
-    for (const auto& func : postDrawLoopCallbacks)
+    for (const auto& func : GroundSceneNamespace::postDrawLoopCallbacks)
     {
         func(pThis);
     }
 }
 
-void GroundScene::addUpdateLoopCallback(void(*func)(GroundScene* pThis, float elapsedTime))
-{
-    updateLoopCallbacks.emplace_back(func);
-}
-
-void GroundScene::addCameraChangeCallback(void(*func)())
-{
-    cameraChangeCallbacks.emplace_back(func);
-}
-
 void __fastcall hkUpdateLoop(GroundScene* pThis, DWORD EDX, float time)
 {
-    for (const auto& func : updateLoopCallbacks)
+    for (const auto& func : GroundSceneNamespace::updateLoopCallbacks)
     {
         func(pThis, time);
     }
@@ -184,7 +166,7 @@ void GroundScene::toggleFreeCamera()
         swg::groundScene::changeCamera(this, Camera::Modes::cm_Free, 0);
     }
 
-    for (const auto& func : cameraChangeCallbacks)
+    for (const auto& func : GroundSceneNamespace::cameraChangeCallbacks)
     {
         func();
     }

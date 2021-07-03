@@ -26,6 +26,7 @@
 
 #include <d3d9.h>
 #include "utinni.h"
+#include <functional>
 
 namespace utinni
 {
@@ -39,7 +40,15 @@ extern void setup(IDirect3DDevice9* pDevice);
 extern void draw();
 extern void render();
 extern bool isRendering();
-UTINNI_API extern void addRenderCallback(void(*func)());
+
+extern UTINNI_API std::vector<std::function<void()>> renderCallbacks;
+
+template<typename T>
+void addRenderCallback(T func)
+{
+    renderCallbacks.emplace_back(func);
+}
+
 UTINNI_API extern bool isInternalUiHovered();
 
 }
@@ -50,10 +59,33 @@ UTINNI_API extern void enable(utinni::Object* obj);
 UTINNI_API extern void disable();
 UTINNI_API extern bool isEnabled();
 UTINNI_API extern bool hasMouseHover();
-UTINNI_API extern void addOnEnabledCallback(void(*func)());
-UTINNI_API extern void addOnDisabledCallback(void(*func)());
-UTINNI_API extern void addOnPositionChangedCallback(void(*func)());
-UTINNI_API extern void addOnRotationChangedCallback(void(*func)());
+
+extern UTINNI_API std::vector<std::function<void()>> onGizmoEnabledCallbacks;
+extern UTINNI_API std::vector<std::function<void()>> onGizmoRotationChangedCallbacks;
+extern UTINNI_API std::vector<std::function<void()>> onGizmoDisabledCallbacks;
+extern UTINNI_API std::vector<std::function<void()>> onGizmoPositionChangedCallbacks;
+
+template<typename T>
+void addOnEnabledCallback(T func)
+{
+    onGizmoEnabledCallbacks.emplace_back(func);
+}
+template<typename T>
+void addOnDisabledCallback(T func)
+{
+    onGizmoDisabledCallbacks.emplace_back(func);
+}
+template<typename T>
+void addOnPositionChangedCallback(T func)
+{
+    onGizmoPositionChangedCallbacks.emplace_back(func);
+}
+template<typename T>
+void addOnRotationChangedCallback(T func)
+{
+    onGizmoRotationChangedCallbacks.emplace_back(func);
+}
+
 UTINNI_API extern void toggleGizmoMode();
 UTINNI_API extern void toggleOperationMode();
 UTINNI_API extern void setGizmoModeToWorld();

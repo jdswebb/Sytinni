@@ -31,8 +31,6 @@ namespace swg::shaderPrimitiveSorter
 
 }
 
-static std::vector<void(*)(int currentPhase)> drawPhaseCallbacks;
-
 namespace utinni::shaderPrimitiveSorter
 {
 directX::DepthTexture* depthTexture;
@@ -77,11 +75,7 @@ __declspec(naked) void midPopCell()
     }
 }
 
-
-void drawPhaseCallback(void(* func)(int currentPhase))
-{
-    drawPhaseCallbacks.emplace_back(func);
-}
+std::vector<std::function<void(int currentPhase)>> drawPhaseCallbacks;
 
 void detour()
 {

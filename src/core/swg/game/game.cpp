@@ -71,39 +71,21 @@ pIsViewFirstPerson isViewFirstPerson = (pIsViewFirstPerson)0x00425C10;
 pIsHudSceneTypeSpace isHudSceneTypeSpace = (pIsHudSceneTypeSpace)0x00426170;
 }
 
-static std::vector<void(*)()> installCallbacks;
-static std::vector<void(*)()> preMainLoopCallbacks;
-static std::vector<void(*)()> mainLoopCallbacks;
-static std::vector<void(*)()> setSceneCallbacks;
-static std::vector<void(*)()> cleanUpSceneCallbacks;
-static std::unique_ptr<utinni::Repository> repository;
+namespace
+{
+std::unique_ptr<utinni::Repository> repository;
+}
 
 namespace utinni
 {
 
-void Game::addInstallCallback(void(*func)())
+namespace Game
 {
-    installCallbacks.emplace_back(func);
-}
-
-void Game::addPreMainLoopCallback(void(*func)())
-{
-    preMainLoopCallbacks.emplace_back(func);
-}
-
-void Game::addMainLoopCallback(void(*func)())
-{
-    mainLoopCallbacks.emplace_back(func);
-}
-
-void Game::addSetSceneCallback(void(*func)())
-{
-    setSceneCallbacks.emplace_back(func);
-}
-
-void Game::addCleanupSceneCallback(void(*func)())
-{
-    cleanUpSceneCallbacks.emplace_back(func);
+std::vector<std::function<void()>> installCallbacks;
+std::vector<std::function<void()>> preMainLoopCallbacks;
+std::vector<std::function<void()>> mainLoopCallbacks;
+std::vector<std::function<void()>> setSceneCallbacks;
+std::vector<std::function<void()>> cleanUpSceneCallbacks;
 }
 
 int getMainLoopCount()
@@ -117,14 +99,14 @@ std::string sceneToLoadTerrainFilename;
 std::string sceneToLoadAvatarObjectFilename = "object/creature/player/shared_human_male.iff";
 void __cdecl hkMainLoop(bool presentToWindow, HWND hwnd, int width, int height)
 {
-    for (const auto& func : preMainLoopCallbacks)
+    for (const auto& func : Game::preMainLoopCallbacks)
     {
         func();
     }
 
     swg::game::mainLoop(presentToWindow, hwnd, width, height);    
 
-    for (const auto& func : mainLoopCallbacks)
+    for (const auto& func : Game::mainLoopCallbacks)
     {
         func();
     }
@@ -147,10 +129,10 @@ void __cdecl hkInstall(int application)
 {
     swg::game::install(application);
 
-    repository = std::unique_ptr<Repository>();
+    repository = std::make_unique<Repository>();
     WorldSnapshot::generateHighestId();
 
-    for (const auto& func : installCallbacks)
+    for (const auto& func : Game::installCallbacks)
     {
         func();
     }
@@ -167,7 +149,7 @@ void __cdecl hkSetScene(GroundScene* scene)
 
     if (scene != nullptr)
     {
-        for (const auto& func : setSceneCallbacks)
+        for (const auto& func : Game::setSceneCallbacks)
         {
             func();
         }
@@ -180,7 +162,7 @@ void __cdecl hkCleanupScene()
 
     imgui_gizmo::disable();
 
-    for (const auto& func : cleanUpSceneCallbacks)
+    for (const auto& func : Game::cleanUpSceneCallbacks)
     {
         func();
     }

@@ -25,11 +25,24 @@
 #pragma once
 
 #include "utinni.h"
+#include <functional>
 
 namespace utinni::postProcessing
 {
-UTINNI_API extern void addPreSceneRenderCallback(void (*func)());
-UTINNI_API extern void addPostSceneRenderCallback(void (*func)());
+extern UTINNI_API std::vector<std::function<void()>> preSceneRenderCallbacks;
+extern UTINNI_API std::vector<std::function<void()>> postSceneRenderCallbacks;
+
+template<typename T>
+void addPreSceneRenderCallback(T func)
+{
+    preSceneRenderCallbacks.emplace_back(func);
+}
+
+template<typename T>
+void addPostSceneRenderCallback(T func)
+{
+    postSceneRenderCallbacks.emplace_back(func);
+}
 
 void detour();
 }

@@ -82,73 +82,27 @@ pDrawExtent drawExtent = (pDrawExtent)0x00759A70;
 pScreenshot screenshot = (pScreenshot)0x00755890;
 }
 
-static std::string screenshotsDir = "screenshots/";
-
-static std::vector<void(*)(float elapsedTime)> preUpdateCallback;
-static std::vector<void(*)(float elapsedTime)> postUpdateCallback;
-
-static std::vector<void(*)()> preBeginSceneCallback;
-static std::vector<void(*)()> postBeginSceneCallback;
-
-static std::vector<void(*)()> preEndSceneCallback;
-static std::vector<void(*)()> postEndSceneCallback;
-
-static std::vector<void(*)(HWND hwnd, int width, int height)> prePresentWindowCallback;
-static std::vector<void(*)(HWND hwnd, int width, int height)> postPresentWindowCallback;
-
-static std::vector<void(*)()> prePresentCallback;
-static std::vector<void(*)()> postPresentCallback;
-
 namespace utinni
 {
-void Graphics::addPreUpdateLoopCallback(void(*func)(float elapsedTime))
-{
-    preUpdateCallback.emplace_back(func);
-}
 
-void Graphics::addPostUpdateLoopCallback(void(*func)(float elapsedTime))
+namespace Graphics
 {
-    postUpdateCallback.emplace_back(func);
-}
+std::string screenshotsDir = "screenshots/";
 
-void Graphics::addPreBeginSceneCallback(void(*func)())
-{
-    preBeginSceneCallback.emplace_back(func);
-}
+std::vector<std::function<void(float elapsedTime)>> preUpdateCallback;
+std::vector<std::function<void(float elapsedTime)>> postUpdateCallback;
 
-void Graphics::addPostBeginSceneCallback(void(*func)())
-{
-    postBeginSceneCallback.emplace_back(func);
-}
+std::vector<std::function<void()>> preBeginSceneCallback;
+std::vector<std::function<void()>> postBeginSceneCallback;
 
-void Graphics::addPreEndSceneCallback(void(*func)())
-{
-    preEndSceneCallback.emplace_back(func);
-}
+std::vector<std::function<void()>> preEndSceneCallback;
+std::vector<std::function<void()>> postEndSceneCallback;
 
-void Graphics::addPostEndSceneCallback(void(*func)())
-{
-    postEndSceneCallback.emplace_back(func);
-}
+std::vector<std::function<void(HWND hwnd, int width, int height)>> prePresentWindowCallback;
+std::vector<std::function<void(HWND hwnd, int width, int height)>> postPresentWindowCallback;
 
-void Graphics::addPrePresentWindowCallback(void(*func)(HWND hwnd, int width, int height))
-{
-    prePresentWindowCallback.emplace_back(func);
-}
-
-void Graphics::addPostPresentWindowCallback(void(*func)(HWND hwnd, int width, int height))
-{
-    postPresentWindowCallback.emplace_back(func);
-}
-
-void Graphics::addPrePresentCallback(void(*func)())
-{
-    prePresentCallback.emplace_back(func);
-}
-
-void Graphics::addPostPresentCallback(void(*func)())
-{
-    postPresentCallback.emplace_back(func);
+std::vector<std::function<void()>> prePresentCallback;
+std::vector<std::function<void()>> postPresentCallback;
 }
 
 void Graphics::useHardwareCursor(bool value)
@@ -212,14 +166,14 @@ bool __cdecl hkInstall()
 
 void __cdecl hkUpdate(float elapsedTime)
 {
-    for (const auto& func : preUpdateCallback)
+    for (const auto& func : Graphics::preUpdateCallback)
     {
         func(elapsedTime);
     }
 
     swg::graphics::update(elapsedTime);
 
-    for (const auto& func : postUpdateCallback)
+    for (const auto& func : Graphics::postUpdateCallback)
     {
         func(elapsedTime);
     }
@@ -227,14 +181,14 @@ void __cdecl hkUpdate(float elapsedTime)
 
 void __cdecl hkBeginScene()
 {
-    for (const auto& func : preBeginSceneCallback)
+    for (const auto& func : Graphics::preBeginSceneCallback)
     {
         func();
     }
 
     swg::graphics::beginScene();
 
-    for (const auto& func : postBeginSceneCallback)
+    for (const auto& func : Graphics::postBeginSceneCallback)
     {
         func();
     }
@@ -244,14 +198,14 @@ int oldWidth = 0;
 int oldHeight = 0;
 void __cdecl hkEndScene()
 {
-    for (const auto& func : preEndSceneCallback)
+    for (const auto& func : Graphics::preEndSceneCallback)
     {
         func();
     }
 
     swg::graphics::endScene();
 
-    for (const auto& func : postEndSceneCallback)
+    for (const auto& func : Graphics::postEndSceneCallback)
     {
         func();
     }
@@ -259,14 +213,14 @@ void __cdecl hkEndScene()
 
 void __cdecl hkPresentWindow(HWND hwnd, int width, int height)
 {
-    for (const auto& func : prePresentWindowCallback)
+    for (const auto& func : Graphics::prePresentWindowCallback)
     {
         func(hwnd, width, height);
     }
 
     swg::graphics::presentWindow(hwnd, width, height);
 
-    for (const auto& func : postPresentWindowCallback)
+    for (const auto& func : Graphics::postPresentWindowCallback)
     {
         func(hwnd, width, height);
     }
@@ -274,14 +228,14 @@ void __cdecl hkPresentWindow(HWND hwnd, int width, int height)
 
 void __cdecl hkPresent()
 {
-    for (const auto& func : prePresentCallback)
+    for (const auto& func : Graphics::prePresentCallback)
     {
         func();
     }
 
     swg::graphics::present();
 
-    for (const auto& func : postPresentCallback)
+    for (const auto& func : Graphics::postPresentCallback)
     {
         func();
     }
@@ -289,7 +243,7 @@ void __cdecl hkPresent()
 
 bool __cdecl hkScreenshot(const char* filename)
 {
-    std::string newFilename = screenshotsDir;
+    std::string newFilename = Graphics::screenshotsDir;
 
     const char* pos = strrchr(filename, '/');
     if (pos != nullptr)
@@ -301,7 +255,7 @@ bool __cdecl hkScreenshot(const char* filename)
         newFilename += filename;
     }
 
-    CreateDirectory((utility::getWorkingDirectory() + "/" + screenshotsDir).c_str(), nullptr);
+    CreateDirectory((utility::getWorkingDirectory() + "/" + Graphics::screenshotsDir).c_str(), nullptr);
 
     return swg::graphics::screenshot(newFilename.c_str());
 }

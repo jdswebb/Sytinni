@@ -27,40 +27,106 @@
 #include "utinni.h"
 #include "swg/misc/swg_math.h"
 #include "swg/appearance/extent.h"
+#include <functional>
 
 namespace utinni
 {
-    class UTINNI_API Graphics
+
+namespace Graphics
 {
-public:
-    static void addPreUpdateLoopCallback(void (*func)(float elapsedTime));
-    static void addPostUpdateLoopCallback(void (*func)(float elapsedTime));
-    static void addPreBeginSceneCallback(void (*func)());
-    static void addPostBeginSceneCallback(void (*func)());
-    static void addPreEndSceneCallback(void (*func)());
-    static void addPostEndSceneCallback(void (*func)());
-    static void addPrePresentWindowCallback(void (*func)(HWND hwnd, int width, int height));
-    static void addPostPresentWindowCallback(void (*func)(HWND hwnd, int width, int height));
-    static void addPrePresentCallback(void (*func)());
-    static void addPostPresentCallback(void (*func)());
+    extern UTINNI_API std::vector<std::function<void(float elapsedTime)>> preUpdateCallback;
+    extern UTINNI_API std::vector<std::function<void(float elapsedTime)>> postUpdateCallback;
+               
+    extern UTINNI_API std::vector<std::function<void()>> preBeginSceneCallback;
+    extern UTINNI_API std::vector<std::function<void()>> postBeginSceneCallback;
+                                                       
+    extern UTINNI_API std::vector<std::function<void()>> preEndSceneCallback;
+    extern UTINNI_API std::vector<std::function<void()>> postEndSceneCallback;
+             
+    extern UTINNI_API std::vector<std::function<void(HWND hwnd, int width, int height)>> prePresentWindowCallback;
+    extern UTINNI_API std::vector<std::function<void(HWND hwnd, int width, int height)>> postPresentWindowCallback;
+               
+    extern UTINNI_API std::vector<std::function<void()>> prePresentCallback;
+    extern UTINNI_API std::vector<std::function<void()>> postPresentCallback;
 
-    static void useHardwareCursor(bool value);
-    static void showMouseCursor(bool isShown);
-    static void setSystemMouseCursorPosition(int X, int Y);
+    template<typename T>
+    void addPreUpdateLoopCallback(T func)
+    {
+        preUpdateCallback.emplace_back(func);
+    }
 
-    static int getCurrentRenderTargetWidth();
-    static int getCurrentRenderTargetHeight();
+    template<typename T>
+    void addPostUpdateLoopCallback(T func)
+    {
+        postUpdateCallback.emplace_back(func);
+    }
 
-    static void flushResources(bool fullFlush);
+    template<typename T>
+    void addPreBeginSceneCallback(T func)
+    {
+        preBeginSceneCallback.emplace_back(func);
+    }
 
-    static void reloadTextures();
+    template<typename T>
+    void addPostBeginSceneCallback(T func)
+    {
+        postBeginSceneCallback.emplace_back(func);
+    }
 
-    static void setStaticShader(swgptr staticShader, int pass = 0);
-    static void setObjectToWorldTransformAndScale(swg::math::Transform* objecToWorld, swg::math::Vector* scale);
-    static void drawExtent(Extent* extent, swgptr vecArgbColor);
+    template<typename T>
+    void addPreEndSceneCallback(T func)
+    {
+        preEndSceneCallback.emplace_back(func);
+    }
 
-    static void detour();
+    template<typename T>
+    void addPostEndSceneCallback(T func)
+    {
+        postEndSceneCallback.emplace_back(func);
+    }
 
+    template<typename T>
+    void addPrePresentWindowCallback(T func)
+    {
+        prePresentWindowCallback.emplace_back(func);
+    }
+
+    template<typename T>
+    void addPostPresentWindowCallback(T func)
+    {
+        postPresentWindowCallback.emplace_back(func);
+    }
+
+    template<typename T>
+    void addPrePresentCallback(T func)
+    {
+        prePresentCallback.emplace_back(func);
+    }
+
+    template<typename T>
+    void addPostPresentCallback(void(*func)())
+    {
+        postPresentCallback.emplace_back(func);
+    }
+
+    
+    UTINNI_API void useHardwareCursor(bool value);
+    UTINNI_API void showMouseCursor(bool isShown);
+    UTINNI_API void setSystemMouseCursorPosition(int X, int Y);
+    
+    UTINNI_API int getCurrentRenderTargetWidth();
+    UTINNI_API int getCurrentRenderTargetHeight();
+    
+    UTINNI_API void flushResources(bool fullFlush);
+    
+    UTINNI_API void reloadTextures();
+    
+    UTINNI_API void setStaticShader(swgptr staticShader, int pass = 0);
+    UTINNI_API void setObjectToWorldTransformAndScale(swg::math::Transform* objecToWorld, swg::math::Vector* scale);
+    UTINNI_API void drawExtent(Extent* extent, swgptr vecArgbColor);
+    
+    UTINNI_API void detour();
 };
+
 };
 

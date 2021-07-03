@@ -31,13 +31,16 @@
 #include <d3d9types.h>
 #include "nvapi/nvapi.h"
 
+#include <functional>
+
 #define FOURCC_INTZ ((D3DFORMAT)(MAKEFOURCC('I','N','T','Z')))
 #define RESZ_CODE 0x7FA05000
 
-static std::vector<void(*)()> depthResolveCallbacks;
 
 namespace directX
 {
+
+std::vector<std::function<void()>> depthResolveCallbacks;
 
 // ?getBuffer@Commander@DPVS@@IBE?AW4BufferType@LibraryDefs@2@AAPBEAAH1@Z
 
@@ -201,11 +204,6 @@ void DepthTexture::resolveDepth(const LPDIRECT3DDEVICE9 pDevice, IDirect3DSurfac
 	 }
 
 	 //copyTextureData(pTexture, textureDesc);
-}
-
-void DepthTexture::addDepthResolveCallback(void(* func)())
-{
-	 depthResolveCallbacks.emplace_back(func);
 }
 
 void DepthTexture::resolveDepth()

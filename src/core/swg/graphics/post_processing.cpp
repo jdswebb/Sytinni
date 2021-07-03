@@ -34,11 +34,12 @@ pPostSceneRender postSceneRender = (pPostSceneRender)0x0064B560;
 
 }
 
-static std::vector<void(*)()> preSceneRenderCallbacks;
-static std::vector<void(*)()> postSceneRenderCallbacks;
-
 namespace utinni::postProcessing
 {
+
+std::vector<std::function<void()>> preSceneRenderCallbacks;
+std::vector<std::function<void()>> postSceneRenderCallbacks;
+
 void __cdecl hkPreSceneRender() // Originally a Bloom class function, repurposed to be a general PostProcessing function.
 {
     for (const auto& func : preSceneRenderCallbacks)
@@ -57,16 +58,6 @@ void __cdecl hkPostSceneRender() // Originally a Bloom class function, repurpose
     {
         func();
     }
-}
-
-void addPreSceneRenderCallback(void(* func)())
-{
-    preSceneRenderCallbacks.emplace_back(func);
-}
-
-void addPostSceneRenderCallback(void(* func)())
-{
-    postSceneRenderCallbacks.emplace_back(func);
 }
 
 void detour()

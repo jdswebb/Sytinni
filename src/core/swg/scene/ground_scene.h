@@ -27,10 +27,21 @@
 #include "utinni.h"
 #include "scene.h"
 #include "swg/camera/camera.h"
+#include <functional>
 
 namespace utinni
 {
 class Camera;
+
+class GroundScene;
+
+namespace GroundSceneNamespace
+{
+extern UTINNI_API std::vector<std::function<void(utinni::GroundScene* pThis)>> preDrawLoopCallbacks;
+extern UTINNI_API std::vector<std::function<void(utinni::GroundScene* pThis)>> postDrawLoopCallbacks;
+extern UTINNI_API std::vector<std::function<void(utinni::GroundScene* pThis, float time)>> updateLoopCallbacks;
+extern UTINNI_API std::vector<std::function<void()>> cameraChangeCallbacks;
+}
 
 class UTINNI_API GroundScene : public NetworkScene
 {
@@ -78,10 +89,29 @@ public:
     static GroundScene* ctor(const char* terrainFilename, const char* avatarObjectFilename);
     std::string getName();
 
-    static void addPreDrawLoopCallback(void(*func)(GroundScene* pThis));
-    static void addPostDrawLoopCallback(void(*func)(GroundScene* pThis));
-    static void addUpdateLoopCallback(void(*func)(GroundScene* pThis, float elapsedTime));
-    static void addCameraChangeCallback(void(*func)());
+    template<typename T>
+    void addPreDrawLoopCallback(T func)
+    {
+        GroundSceneNamespace::preDrawLoopCallbacks.emplace_back(func);
+    }
+
+    template<typename T>
+    void addPostDrawLoopCallback(T func)
+    {
+        GroundSceneNamespace::postDrawLoopCallbacks.emplace_back(func);
+    }
+
+    template<typename T>
+    void addUpdateLoopCallback(T func)
+    {
+        GroundSceneNamespace::updateLoopCallbacks.emplace_back(func);
+    }
+
+    template<typename T>
+    void addCameraChangeCallback(T func)
+    {
+        GroundSceneNamespace::cameraChangeCallbacks.emplace_back(func);
+    }
 
     static void detour();
     static void removeDetour();

@@ -1,9 +1,14 @@
 #pragma once
 
+#include "utinni.h"
 #include <d3d9.h>
+#include <functional>
+#include <vector>
 
 namespace directX
 {
+extern UTINNI_API std::vector<std::function<void()>> depthResolveCallbacks;
+
 class DepthTexture
 {
 private:
@@ -34,6 +39,12 @@ public:
 
 	 int getStage() { return stage; }
 	 void setStage(int value) { stage = value; }
+	
+	 template<typename T>
+     void addDepthResolveCallback(T func)
+     {
+         depthResolveCallbacks.emplace_back(func);
+     }
 
 	 UTINNI_API static void addDepthResolveCallback(void (*func)());
 };

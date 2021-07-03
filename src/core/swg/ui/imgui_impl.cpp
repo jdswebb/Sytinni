@@ -27,9 +27,6 @@
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_dx9.h"
 #include "ImGuizmo/ImGuizmo.h"
-
-#include <vector>
-
 #include "swg/graphics/graphics.h"
 #include "swg/misc/direct_input.h"
 #include "swg/scene/ground_scene.h"
@@ -41,6 +38,8 @@
 #include "swg/game/game.h"
 #include "swg/scene/render_world.h"
 #include "utility/log.h"
+#include <vector>
+#include <functional>
 
 using namespace utinni;
 using namespace swg::math;
@@ -48,7 +47,7 @@ using namespace swg::math;
 namespace imgui_impl
 {
 
-static std::vector<void(*)()> renderCallbacks;
+std::vector<std::function<void()>> renderCallbacks;
 
 bool rendering;
 bool enableUi;
@@ -225,21 +224,15 @@ bool isRendering()
 	 return rendering;
 }
 
-void addRenderCallback(void(*func)())
-{
-    log::info("Adding callback");
-	renderCallbacks.emplace_back(func);
 }
-
-}
-
-static std::vector<void(*)()> onGizmoEnabledCallbacks;
-static std::vector<void(*)()> onGizmoDisabledCallbacks;
-static std::vector<void(*)()> onGizmoPositionChangedCallbacks;
-static std::vector<void(*)()> onGizmoRotationChangedCallbacks;
 
 namespace imgui_gizmo
 {
+std::vector<std::function<void()>> onGizmoEnabledCallbacks;
+std::vector<std::function<void()>> onGizmoDisabledCallbacks;
+std::vector<std::function<void()>> onGizmoPositionChangedCallbacks;
+std::vector<std::function<void()>> onGizmoRotationChangedCallbacks;
+
 bool enabled = false;
 bool gizmoHasMouseHover = false;
 bool wasUsed = false;
@@ -286,26 +279,6 @@ bool isEnabled()
 bool hasMouseHover()
 {
 	 return gizmoHasMouseHover;
-}
-
-void addOnEnabledCallback(void(*func)())
-{
-	 onGizmoEnabledCallbacks.emplace_back(func);
-}
-
-void addOnDisabledCallback(void(*func)())
-{
-	 onGizmoDisabledCallbacks.emplace_back(func);
-}
-
-void addOnPositionChangedCallback(void(*func)())
-{
-	 onGizmoPositionChangedCallbacks.emplace_back(func);
-}
-
-void addOnRotationChangedCallback(void(*func)())
-{
-	 onGizmoRotationChangedCallbacks.emplace_back(func);
 }
 
 void toggleGizmoMode()

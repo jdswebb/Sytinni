@@ -25,10 +25,19 @@
 #pragma once
 
 #include "utinni.h"
+#include <functional>
 
 namespace utinni::shaderPrimitiveSorter
 {
-UTINNI_API extern void drawPhaseCallback(void (*func)(int currentPhase));
+
+extern UTINNI_API std::vector<std::function<void(int currentPhase)>> drawPhaseCallbacks;
+
+template<typename T>
+void addDrawPhaseCallback(void (*func)(int currentPhase))
+{
+    drawPhaseCallbacks.emplace_back(func);
+}
 
 void detour();
+
 }
