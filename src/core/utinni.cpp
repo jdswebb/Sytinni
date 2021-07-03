@@ -96,12 +96,9 @@ void createPatches()
     utinni::cuiMisc::patch();
     utinni::debugCamera::patch();
 }
-#include <fstream>
+
 void dllMain()
 {
-    std::ofstream f("D:/what.txt");
-    f << "hello";
-
     char dllPathbuffer[MAX_PATH];
     HMODULE handle = nullptr;
     GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, (LPCSTR)&createDetours, &handle);
