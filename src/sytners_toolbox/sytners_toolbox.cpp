@@ -13,6 +13,7 @@
 #include "swg/scene/world_snapshot.h"
 #include "swg/ui/cui_misc.h"
 #include "swg/misc/repository.h"
+#include <DirectXMath.h>
 
 using namespace utinni;
 
@@ -121,6 +122,27 @@ public:
                         player->positionAndRotationChanged(false, oldPos);
                     }
 
+                    swg::math::Quaternion q(transform);
+                    DirectX::XMFLOAT4 xfm{ q.X,q.Y,q.Z,q.W };
+                    XMStoreFloat4(&xfm, DirectX::XMQuaternionConjugate(XMLoadFloat4(&xfm)));
+                    if (ImGui::gizmo3D("Free-cam rotation", *(quat*)&xfm.x, 200))
+                    {
+                        XMStoreFloat4(&xfm, DirectX::XMQuaternionConjugate(XMLoadFloat4(&xfm)));
+                        DirectX::XMFLOAT3X3 m;
+                        XMStoreFloat3x3(&m, DirectX::XMMatrixRotationQuaternion(XMLoadFloat4(&xfm)));
+                        transform.matrix[0][0] = m._11;
+                        transform.matrix[0][1] = m._12;
+                        transform.matrix[0][2] = m._13;
+                        transform.matrix[1][0] = m._21;
+                        transform.matrix[1][1] = m._22;
+                        transform.matrix[1][2] = m._23;
+                        transform.matrix[2][0] = m._31;
+                        transform.matrix[2][1] = m._32;
+                        transform.matrix[2][2] = m._33;
+                        player->setTransform_o2w(transform);
+                        player->positionAndRotationChanged(false, oldPos);
+                    }
+
                     if (ImGui::Button("Toggle appearance"))
                     {
                         playerObject::togglePlayerAppearance();
@@ -150,6 +172,27 @@ public:
                         if (ImGui::DragFloat3("Camera position", &pos.X))
                         {
                             transform.setPosition(pos);
+                            camera->setTransform_o2w(transform);
+                            camera->positionAndRotationChanged(false, oldPos);
+                        }
+
+                        swg::math::Quaternion q(transform);
+                        DirectX::XMFLOAT4 xfm{ q.X,q.Y,q.Z,q.W };
+                        XMStoreFloat4(&xfm, DirectX::XMQuaternionConjugate(XMLoadFloat4(&xfm)));
+                        if (ImGui::gizmo3D("Free-cam rotation", *(quat*)&xfm.x, 200))
+                        {
+                            XMStoreFloat4(&xfm, DirectX::XMQuaternionConjugate(XMLoadFloat4(&xfm)));
+                            DirectX::XMFLOAT3X3 m;
+                            XMStoreFloat3x3(&m, DirectX::XMMatrixRotationQuaternion(XMLoadFloat4(&xfm)));
+                            transform.matrix[0][0] = m._11;
+                            transform.matrix[0][1] = m._12;
+                            transform.matrix[0][2] = m._13;
+                            transform.matrix[1][0] = m._21;
+                            transform.matrix[1][1] = m._22;
+                            transform.matrix[1][2] = m._23;
+                            transform.matrix[2][0] = m._31;
+                            transform.matrix[2][1] = m._32;
+                            transform.matrix[2][2] = m._33;
                             camera->setTransform_o2w(transform);
                             camera->positionAndRotationChanged(false, oldPos);
                         }
@@ -226,10 +269,14 @@ public:
                 }
 
             }
-
+            
             ImGui::CollapsingHeader("Graphics", ImGuiTreeNodeFlags_DefaultOpen);
+            if (ImGui::Button("Reload textures"))
+            {
+                Graphics::reloadTextures();
+            }
             auto depthTex = directX::getDepthTexture();
-            if (depthTex != nullptr)
+            if (!(depthTex == nullptr || depthTex->getTextureColor() == nullptr || utinni::Game::getPlayer() == nullptr))
             {
                 if (ImGui::Checkbox("Show Depth Window", &showDepthWindow)) {}
                 if (ImGui::Checkbox("Show Color Window", &showColorWindow)) {}
