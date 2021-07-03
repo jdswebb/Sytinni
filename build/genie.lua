@@ -15,6 +15,7 @@ function commonDefines()
     defines {
         "WIN32_LEAN_AND_MEAN",
         "NOMINMAX",
+        "SPDLOG_NO_EXCEPTION",
         "CONFIG_NAME=\"$(ConfigurationName)\"",
         "PROJECT_NAME=\"$(ProjectName)\"",
     }
@@ -98,7 +99,7 @@ solution (SOL_NAME)
         
         defines { "BUILDING_LAUNCHER" }
         
-        links { "core", "ini" }
+        links { "ini" }
         
         includedirs {
             SWOOTEENIE_ROOT .. "/core"
@@ -137,6 +138,7 @@ solution (SOL_NAME)
         files {
             SWOOTEENIE_ROOT .. "/core/**.h",
             SWOOTEENIE_ROOT .. "/core/**.cpp",
+            SWOOTEENIE_ROOT .. "/core/**.rc",
             EXT_ROOT .. "/ImGuizmo/**.h",
             EXT_ROOT .. "/ImGuizmo/**.cpp",
             EXT_ROOT .. "/DetourXS/**.h",

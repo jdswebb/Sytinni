@@ -23,3 +23,4 @@ ipch/
 /UtinniCoreDotNet/Generated/Std.cs
 /UtinniCoreDotNet/Generated/UtinniCore.cs
 *.aps
+/build/generated

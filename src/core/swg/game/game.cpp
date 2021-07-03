@@ -76,7 +76,7 @@ static std::vector<void(*)()> preMainLoopCallbacks;
 static std::vector<void(*)()> mainLoopCallbacks;
 static std::vector<void(*)()> setSceneCallbacks;
 static std::vector<void(*)()> cleanUpSceneCallbacks;
-static utinni::Repository repository;
+static std::unique_ptr<utinni::Repository> repository;
 
 namespace utinni
 {
@@ -147,7 +147,7 @@ void __cdecl hkInstall(int application)
 {
     swg::game::install(application);
 
-    repository = Repository();
+    repository = std::unique_ptr<Repository>();
     WorldSnapshot::generateHighestId();
 
     for (const auto& func : installCallbacks)
@@ -246,7 +246,7 @@ void Game::cleanupScene()
 
 Repository* Game::getRepository()
 {
-    return &repository;
+    return repository.get();
 }
 
 Object* Game::getPlayer()
