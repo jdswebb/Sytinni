@@ -166,48 +166,55 @@ bool isSetup = false;
 	  isSetup = true;
  }
 
+ void draw()
+ {
+	 if (isSetup)
+     {
+         ImGui_ImplDX9_NewFrame();
+         ImGui_ImplWin32_NewFrame();
+         ImGui::NewFrame();
+
+         static bool hovered = false;
+         static bool hoveredPrev;
+         hoveredPrev = hovered;
+         hovered = ImGui::IsAnyItemHovered();
+
+         if (hovered != hoveredPrev)
+         {
+             if (hovered)
+             {
+                 DirectInput::suspend();
+             }
+             else
+             {
+                 DirectInput::resume();
+             }
+         }
+         if (ImGui::IsKeyPressed(VK_F1))
+         {
+             enableUi = !enableUi;
+         }
+         if (enableUi)
+         {
+             for (const auto& func : renderCallbacks) // ToDo add an additional callback to host controls in the future main ImGui window
+             {
+                 func();
+             }
+         }
+         imgui_gizmo::draw();
+
+         ImGui::End();
+
+         ImGui::EndFrame();
+         ImGui::Render();
+	 }
+ }
+
  void render()
  {
 	  if (isSetup)
 	  {
 			rendering = true;
-			ImGui_ImplDX9_NewFrame();
-			ImGui_ImplWin32_NewFrame();
-			ImGui::NewFrame();
-
-			static bool hovered = false;
-			static bool hoveredPrev;
-			hoveredPrev = hovered;
-			hovered = ImGui::IsAnyItemHovered();
-
-			if (hovered != hoveredPrev)
-			{
-                if (hovered)
-                {
-                    DirectInput::suspend();
-                }
-                else
-                {
-                    DirectInput::resume();
-                }
-			}
-			if (ImGui::IsKeyPressed(VK_F1))
-			{
-				enableUi = !enableUi;
-			}
-            if (enableUi)
-            {
-				for (const auto& func : renderCallbacks) // ToDo add an additional callback to host controls in the future main ImGui window
-				{
-					func();
-				}
-			}
-			imgui_gizmo::draw();
-
-			ImGui::End();
-
-			ImGui::EndFrame();
-			ImGui::Render();
 			ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 			rendering = false;
 	  }

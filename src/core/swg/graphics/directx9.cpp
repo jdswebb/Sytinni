@@ -195,7 +195,9 @@ HRESULT __stdcall hkBeginScene(LPDIRECT3DDEVICE9 pDevice)
 	 if (pDirectXDevice == nullptr)
 	 {
 		  pDirectXDevice = pDevice;
-	 }
+     }
+
+     imgui_impl::draw();
 
     HRESULT result = beginScene(pDevice);
 

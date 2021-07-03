@@ -2,6 +2,7 @@
 #include "swg/game/game.h"
 #include "swg/camera/camera.h"
 #include "swg/graphics/graphics.h"
+#include "swg/scene/ground_scene.h"
 #include "plugin_framework/utinni_plugin.h"
 #include "swg/ui/imgui_impl.h"
 #include "swg/misc/swg_math.h"
@@ -79,16 +80,21 @@ void SytnersUtinniUI()
     ImGui::GetStyle().ItemSpacing.y = 1.0f;
     ImGui::GetStyle().FramePadding.y = 1.0f;
 
-    ImGui::Begin("Tests", 0, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse); // ImVec2(250, 300), 0.9f,  ImGuiWindowFlags_NoResize |
+    ImGui::Begin("Sytner's Toolbox", 0, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse); // ImVec2(250, 300), 0.9f,  ImGuiWindowFlags_NoResize |
     {
         auto camera = Game::getCamera();
         if (camera != nullptr)
         {
-            auto transform = camera->getTransform();
-            swg::math::Vector pos;
-         
+            auto transform = *camera->getTransform();
+            swg::math::Vector pos = transform.getPosition();
+            swg::math::Vector oldPos = transform.getPosition();
+            if (ImGui::DragFloat3("Position", &pos.X))
+            {
+                transform.setPosition(pos);
+                camera->setTransform_o2w(transform);
+                camera->positionAndRotationChanged(false, oldPos);
+            }
         }
-
 
         auto depthTex = directX::getDepthTexture();
         if (depthTex != nullptr)

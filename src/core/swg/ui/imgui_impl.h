@@ -36,6 +36,7 @@ namespace imgui_impl
 {
 UTINNI_API extern void enableInternalUi(bool enable);
 extern void setup(IDirect3DDevice9* pDevice);
+extern void draw();
 extern void render();
 extern bool isRendering();
 UTINNI_API extern void addRenderCallback(void(*func)());
