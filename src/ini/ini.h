@@ -25,6 +25,8 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include "LeksysINI/iniparser.hpp"
 
 namespace utinni
 {
@@ -53,34 +55,31 @@ public:
 
     UtINI();
     UtINI(const std::string& filename);
-    ~UtINI();
 
-    void load() const;
+    void load();
     void load(const std::string& filename);
     void save() const;
 
-    void createUtinniSettings() const;
-    void addSetting(const Value& value) const;
-    void addSetting(const char* sectionName, const char* valueName, const char* value, Value::Types type) const;
+    void createUtinniSettings();
+    void addSetting(const Value& value);
+    void addSetting(const char* sectionName, const char* valueName, const char* value, Value::Types type);
 
-    void DeleteSection(const char* sectionName);
+    void deleteSection(const char* sectionName);
 
-    std::string getString(const char* sectionName, const char* valueName) const;
-    bool getBool(const char* sectionName, const char* valueName) const;
-    int getInt(const char* sectionName, const char* valueName) const;
-    float getFloat(const char* sectionName, const char* valueName) const;
+    std::string getString(const char* sectionName, const char* valueName);
+    bool getBool(const char* sectionName, const char* valueName);
+    int getInt(const char* sectionName, const char* valueName);
+    float getFloat(const char* sectionName, const char* valueName);
 
-    void setString(const char* sectionName, const char* valueName, const char* value) const;
-    void setBool(const char* sectionName, const char* valueName, bool value) const;
-    void setInt(const char* sectionName, const char* valueName, int value) const;
-    void setFloat(const char* sectionName, const char* valueName, float value) const;
+    void setString(const char* sectionName, const char* valueName, const char* value);
+    void setBool(const char* sectionName, const char* valueName, bool value);
+    void setInt(const char* sectionName, const char* valueName, int value);
+    void setFloat(const char* sectionName, const char* valueName, float value);
 
 private:
     std::string iniFilename;
-
-    // Need to use PIMPL to hide the std::vector<Value> settings, as cppSharp doesn't play nice with them
-    struct Impl;
-    Impl* pImpl{};
+    INI::File ini;
+    std::vector<Value> settings;
 
 };
 }
