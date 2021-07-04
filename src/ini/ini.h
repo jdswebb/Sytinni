@@ -31,7 +31,7 @@
 namespace utinni
 {
 
-class UtINI
+class IniConfig
 {
 public:
     struct Value
@@ -53,8 +53,8 @@ public:
         Types type;
     };
 
-    UtINI();
-    UtINI(const std::string& filename);
+    IniConfig();
+    IniConfig(const std::string& filename);
 
     void load();
     void load(const std::string& filename);
@@ -77,8 +77,8 @@ public:
     void setFloat(const char* sectionName, const char* valueName, float value);
 
 private:
-    std::string iniFilename;
     INI::File ini;
+    std::string iniFilename;
     std::vector<Value> settings;
 
 };

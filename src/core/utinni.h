@@ -45,8 +45,6 @@ using byte = uint8_t;
 
 #include <string>
 #include <vector>
-#include <map>
-#include <unordered_map>
 
 #include "DetourXS/detourxs.h"
 
@@ -57,10 +55,10 @@ class PluginManager;
 
 namespace utinni
 {
-class UtINI;
+class IniConfig;
 
 UTINNI_API extern const std::string& getPath();
 UTINNI_API extern const std::string& getSwgCfgFilename();
-UTINNI_API extern UtINI& getConfig();
+UTINNI_API extern IniConfig& getConfig();
 UTINNI_API extern PluginManager& getPluginManager();
 };

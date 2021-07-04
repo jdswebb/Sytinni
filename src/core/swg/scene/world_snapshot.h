@@ -27,6 +27,8 @@
 #include "utinni.h"
 #include "swg/misc/swg_math.h"
 #include "swg/object/object.h"
+#include <map>
+#include <unordered_map>
 
 namespace utinni
 {

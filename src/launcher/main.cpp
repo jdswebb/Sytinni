@@ -217,7 +217,7 @@ std::string getSwgClientFilename()
     const std::string path = std::string(curDirBuffer);
     std::string iniFilename = path.substr(0, path.find_last_of("\\/")) + "\\ut.ini";
 
-    utinni::UtINI ini(iniFilename);
+    utinni::IniConfig ini(iniFilename);
     ini.createUtinniSettings();
     ini.load();
 

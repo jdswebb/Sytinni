@@ -26,6 +26,7 @@
 #include "tree_file.h"
 #include "utility/memory.h"
 #include "utility/log.h"
+#include <map>
 
 namespace utinni
 {

@@ -53,7 +53,7 @@
 std::string path;
 std::string swgOverrideCfgFilename = "utinni.cfg";
 
-static utinni::UtINI ini;
+static utinni::IniConfig ini;
 utinni::PluginManager pluginManager;
 
 void createDetours()
@@ -156,7 +156,7 @@ const std::string& getSwgCfgFilename()
     return swgOverrideCfgFilename;
 }
 
-UtINI& getConfig()
+IniConfig& getConfig()
 {
     return ini;
 }

@@ -279,8 +279,8 @@ void Transform::invert(const Transform& transform)
 void Transform::yaw(float degrees)
 {
     const float radians = degrees * pi / 180;
-    const float sine = sin(radians);
-    const float cosine = cos(radians);
+    const float sine = sinf(radians);
+    const float cosine = cosf(radians);
 
     const float a = matrix[0][0];
     const float c = matrix[0][2];
@@ -302,8 +302,8 @@ void Transform::yaw(float degrees)
 void Transform::pitch(float degrees)
 {
     const float radians = degrees * pi / 180;
-    const float sine = sin(radians);
-    const float cosine = cos(radians);
+    const float sine = sinf(radians);
+    const float cosine = cosf(radians);
 
     const float b = matrix[0][1];
     const float c = matrix[0][2];
@@ -327,8 +327,8 @@ void Transform::pitch(float degrees)
 void Transform::roll(float degrees)
 {
     const float radians = degrees * pi / 180;
-    const float sine = sin(radians);
-    const float cosine = cos(radians);
+    const float sine = sinf(radians);
+    const float cosine = cosf(radians);
 
     const float a = matrix[0][0];
     const float b = matrix[0][1];
@@ -351,14 +351,14 @@ void Transform::roll(float degrees)
 
 void Transform::setRotationAxis(float x, float y, float z)
 {
-    const float cx = cos(x);
-    const float sx = sin(x);
+    const float cx = cosf(x);
+    const float sx = sinf(x);
     
-    const float cy = cos(y);
-    const float sy = sin(y);
+    const float cy = cosf(y);
+    const float sy = sinf(y);
 
-    const float cz = cos(z);
-    const float sz = sin(z);
+    const float cz = cosf(z);
+    const float sz = sinf(z);
 
     matrix[0][0] = sy * sz * sx + cz * cx;
     matrix[0][1] = cz * sy * sx - cx * sz;
@@ -380,12 +380,12 @@ void Transform::setRotationAxis(const Vector& vector)
 
 float Transform::getPitch_p2l()
 {
-    return atan2(-matrix[1][2], sqrt((matrix[0][2] * matrix[0][2]) + (matrix[2][2] * matrix[2][2]))) * 180 / pi;
+    return atan2f(-matrix[1][2], sqrtf((matrix[0][2] * matrix[0][2]) + (matrix[2][2] * matrix[2][2]))) * 180.0f / pi;
 }
 
 float Transform::getYaw_p2l()
 {
-    return atan2(matrix[0][2], matrix[2][2]) * 180 / pi;
+    return atan2f(matrix[0][2], matrix[2][2]) * 180.0f / pi;
 }
 
 Vector Transform::rotate_o2w(const Vector& vector)
@@ -585,7 +585,7 @@ Quaternion::Quaternion(const Transform& transform)
     const float trace = transform.matrix[0][0] + transform.matrix[1][1] + transform.matrix[2][2] + 1.0f;
     if (trace >= 2.0f)
     {
-        const float sqrtTrace = sqrt(trace);
+        const float sqrtTrace = sqrtf(trace);
         W = sqrtTrace * 0.5f;
 
         const float d = 0.5f / sqrtTrace;
@@ -614,7 +614,7 @@ Quaternion::Quaternion(const Transform& transform)
         }
 
         float* v = &X;
-        v[i] = sqrt(((transform.matrix[i][i] - transform.matrix[j][j]) - transform.matrix[k][k]) + 1.0f) * 0.5f;
+        v[i] = sqrtf(((transform.matrix[i][i] - transform.matrix[j][j]) - transform.matrix[k][k]) + 1.0f) * 0.5f;
         const float d = 1.0f / (4.0f * v[i]);
         v[j] = (transform.matrix[j][i] + transform.matrix[i][j]) * d;
         v[k] = (transform.matrix[k][i] + transform.matrix[i][k]) * d;

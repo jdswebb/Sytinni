@@ -5,6 +5,7 @@ Sytinni is [Utinni](https://github.com/ptklatt/Utinni) with at least 10% less su
 **Highlight features**
 * Absolutely no C#
 * TJT features are back
+* Easy plugins
 
 **Building**
 * Run build/genie_vs19.bat
