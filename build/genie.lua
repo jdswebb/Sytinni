@@ -1,3 +1,4 @@
+-- build adapted from Astris (https://astris.dev/)
 local SRC_ROOT = "../src/"
 local DATA_ROOT = "../data"
 local SYTINNI_ROOT = "../src/"
@@ -23,30 +24,27 @@ end
 function commonLinks()
     -- windows libs
     links { 
-        "dxguid", 
-        "imm32", 
-        "psapi", 
-        "version", 
+        "dxguid",
+        "imm32",
+        "psapi",
+        "version",
         "winmm"
     }
 end
 function commonFlags()
     -- common flags
     flags {
-        -- "EnableSSE",
-        -- "EnableSSE2",
         "FatalWarnings",
         "NoEditAndContinue",
         "NoRTTI",
         "WinMain"
     }
 end
-function commonBuildOptions()
-    
+function commonBuildOptions()    
     -- some meta files can require bigobj
     buildoptions {
         "/permissive-",
-        "/std:c++latest", 
+        "/std:c++latest",
         "/bigobj",
         "/wd4275" -- non dll-interface struct used as base for dll-interface struct
     }
