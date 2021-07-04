@@ -103,7 +103,8 @@ solution (SOL_NAME)
         }
         files {
             SYTINNI_ROOT .. "/launcher/**.h",
-            SYTINNI_ROOT .. "/launcher/**.cpp"
+            SYTINNI_ROOT .. "/launcher/**.cpp",
+            SYTINNI_ROOT .. "/launcher/**.rc"
         }
     
     project "utinni_core"
