@@ -33,7 +33,7 @@ namespace swg::shaderPrimitiveSorter
 
 namespace utinni::shaderPrimitiveSorter
 {
-directX::DepthTexture* depthTexture;
+directX::TextureResolver* depthTexture;
 
 int vecOffset = 0;
 int phase = 0;
@@ -51,7 +51,7 @@ __declspec(naked) void midPopCell()
         call midPopCell_Call
     }
 
-    depthTexture = directX::getDepthTexture();
+    depthTexture = directX::getTextureResolver();
     phase = vecOffset / phaseStructSize;
     if (phase == depthTexture->getStage()) // divide offset by struct size to get stage
     {

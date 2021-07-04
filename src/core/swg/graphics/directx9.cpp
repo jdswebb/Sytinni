@@ -29,7 +29,7 @@
 #include "utinni.h"
 #include "swg/ui/imgui_impl.h"
 #include "swg/ui/cui_manager.h"
-#include "depth_texture.h"
+#include "texture_resolver.h"
 #include "graphics.h"
 #include "utility/memory.h"
 
@@ -38,7 +38,7 @@ namespace directX
 LPDIRECT3DDEVICE9 pDirectXDevice = nullptr;
 swgptr dllBaseAddress = 0;
 
-DepthTexture* depthTexture = nullptr;
+TextureResolver* depthTexture = nullptr;
 
 static bool blockPresentCall = false;
 static bool isPresenting = false;
@@ -230,7 +230,7 @@ HRESULT __stdcall hkPresent(LPDIRECT3DDEVICE9 pDevice, const RECT* pSourceRect, 
 	
 	 if (depthTexture == nullptr)
 	 {
-		  depthTexture = new DepthTexture();
+		  depthTexture = new TextureResolver();
 	 }
 
 	 if (utinni::Graphics::getCurrentRenderTargetWidth() > 0 && depthTexture->getTextureDepth() == nullptr)
@@ -341,7 +341,7 @@ void cleanup()
 	 depthTexture = nullptr;
 }
 
-DepthTexture* getDepthTexture()
+TextureResolver* getTextureResolver()
 {
 	 return depthTexture;
 }

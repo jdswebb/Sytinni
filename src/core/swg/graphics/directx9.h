@@ -23,15 +23,16 @@
 **/
 
 #pragma once
+
 #include "utinni.h"
-#include "depth_texture.h"
+#include "texture_resolver.h"
 #include <d3d9.h>
 
 namespace directX
 {
 void detour();
 void cleanup();
-UTINNI_API DepthTexture* getDepthTexture();
+UTINNI_API TextureResolver* getTextureResolver();
 
 UTINNI_API extern void toggleWireframe();
 UTINNI_API extern void blockPresent(bool value);

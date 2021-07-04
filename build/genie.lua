@@ -146,11 +146,15 @@ function addPlugin(name)
         commonBuild()
         kind "SharedLib"
                 
-        links { "utinni_core" }
+        links { "utinni_core", "d3dx9" }
         
+        libdirs {
+            EXT_ROOT .. "d3dx9/lib"
+        }
         includedirs {
             SYTINNI_ROOT .. "/core",
-            PLUGINS_ROOT .. "/" .. name
+            PLUGINS_ROOT .. "/" .. name,
+            EXT_ROOT .. "d3dx9/include"
         }
         files {
             PLUGINS_ROOT .. "/" .. name .. "/**.h",
@@ -164,4 +168,4 @@ for dir in io.popen( [[dir "]] .. PLUGINS_ROOT .. [[\" /b /ad]]):lines() do addP
 
 -- The default plugins added to new inis, in order of load
 solution (SOL_NAME)
-    defines { "DEFAULT_PLUGINS=\"sytners_toolbox\"" }
+    defines { "DEFAULT_PLUGINS=\"sytners_toolbox,sytners_fx\"" }
