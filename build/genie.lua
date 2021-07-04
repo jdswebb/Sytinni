@@ -2,6 +2,7 @@
 local SRC_ROOT = "../src/"
 local DATA_ROOT = "../data"
 local SYTINNI_ROOT = "../src/"
+local PLUGINS_ROOT = "../src/plugins"
 local EXT_ROOT = "../external/"
 local SOL_NAME = "sytinni"
 local SOL_EXT_DIR = "$(SolutionDir)..\\..\\external\\"
@@ -160,17 +161,19 @@ function addPlugin(name)
         links { "utinni_core", "ini" }
         
         includedirs {
-            SYTINNI_ROOT .. "/core"
+            SYTINNI_ROOT .. "/core",
+            PLUGINS_ROOT .. "/" .. name
         }
         files {
-            SYTINNI_ROOT .. "/" .. name .. "/**.h",
-            SYTINNI_ROOT .. "/" .. name .. "/**.cpp",
-            SYTINNI_ROOT .. "/" .. name .. "/**.rc"
+            PLUGINS_ROOT .. "/" .. name .. "/**.h",
+            PLUGINS_ROOT .. "/" .. name .. "/**.cpp",
+            PLUGINS_ROOT .. "/" .. name .. "/**.rc"
         }
 end
 
-addPlugin("sytners_toolbox")
+-- Add plugins
+for dir in io.popen( [[dir "]] .. PLUGINS_ROOT .. [[\" /b /ad]]):lines() do addPlugin(dir) end
 
--- the default plugins added to new inis, in order of load
+-- The default plugins added to new inis, in order of load
 project "ini"
     defines { "DEFAULT_PLUGINS=\"sytners_toolbox\"" }
