@@ -172,3 +172,7 @@ function addPlugin(name)
 end
 
 addPlugin("sytners_toolbox")
+
+-- the default plugins added to new inis, in order of load
+project "ini"
+    defines { "DEFAULT_PLUGINS=\"sytners_toolbox\"" }

@@ -40,7 +40,7 @@ const static UtINI::Value utinniSettings[] = {
     { "UtinniCore", "autoLoadScene", "false", UtINI::Value::vt_bool },
     { "UtinniCore", "autoLogin", "false", UtINI::Value::vt_bool },
     { "UtinniCore", "autoLoginUsername", "Local", UtINI::Value::vt_string },
-    { "UtinniCore", "plugins", "sytners_toolbox", UtINI::Value::vt_string },
+    { "UtinniCore", "plugins", DEFAULT_PLUGINS, UtINI::Value::vt_string },
 
     // Log settings
     { "Log", "writeClassName", "false", UtINI::Value::vt_bool },
