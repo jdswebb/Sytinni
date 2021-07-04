@@ -154,18 +154,21 @@ solution (SOL_NAME)
                 "xcopy /Y /E /d \"" .. SOL_DATA_DIR .. "\" " .. "\"" .. (SOL_BUILD_DIR .. TARGET_DIR .. "RelWithDebInfo") .. "\""
             }
         
-    project "sytners_toolbox"
+function addPlugin(name)
+    project (name)
         commonBuild()
         kind "SharedLib"
-        
-        defines { "BUILDING_SUT" }
-        
+                
         links { "utinni_core", "ini" }
         
         includedirs {
             SYTINNI_ROOT .. "/core"
         }
         files {
-            SYTINNI_ROOT .. "/sytners_toolbox/**.h",
-            SYTINNI_ROOT .. "/sytners_toolbox/**.cpp"
+            SYTINNI_ROOT .. "/" .. name .. "/**.h",
+            SYTINNI_ROOT .. "/" .. name .. "/**.cpp",
+            SYTINNI_ROOT .. "/" .. name .. "/**.rc"
         }
+end
+
+addPlugin("sytners_toolbox")
