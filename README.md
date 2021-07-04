@@ -12,4 +12,4 @@ Sytinni is [Utinni](https://github.com/ptklatt/Utinni) with at least 10% less su
 * Compile
 * The end
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot2.png)
