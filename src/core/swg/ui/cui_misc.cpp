@@ -24,7 +24,7 @@
 
 #include "cui_misc.h"
 #include "controls/ui_textbox.h"
-#include "ini/ini.h"
+#include "ini.h"
 #include <fstream>
 
 namespace swg::cuiMisc

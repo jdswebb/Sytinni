@@ -26,7 +26,7 @@
 #include "swg/graphics/graphics.h"
 #include "swg/game/game.h"
 #include "swg/misc/direct_input.h"
-#include "ini/ini.h"
+#include "ini.h"
 #include "utility/memory.h"
 #include "utility/log.h"
 #include "utility/utility.h"

@@ -22,12 +22,123 @@
  * SOFTWARE.
 **/
 
-#include "ini.h"
+#pragma once
+
+#include <string>
+#include <vector>
+#include "LeksysINI/iniparser.hpp"
 
 namespace utinni
 {
-const static IniConfig::Value utinniSettings[] = {
 
+class IniConfig
+{
+public:
+    struct Value
+    {
+        enum Types
+        {
+            vt_iniValue,
+            vt_string,
+            vt_bool,
+            vt_int,
+            vt_float,
+            vt_array,
+            vt_map
+        };
+
+        std::string sectionName;
+        std::string valueName;
+        std::string value;
+        Types type;
+    };
+
+    IniConfig() {}
+    IniConfig(const std::string& filename)
+    {
+        iniFilename = filename;
+    }
+
+    void load();
+
+    void load(const std::string& filename)
+    {
+        iniFilename = filename;
+        load();
+    }
+
+    void save() const
+    {
+        // why is this not const? :/
+        const_cast<INI::File&>(ini).Save(iniFilename);
+    }
+
+    void createUtinniSettings();
+
+    void addSetting(const Value& value)
+    {
+        settings.emplace_back(value);
+    }
+
+    void addSetting(const char* sectionName, const char* valueName, const char* value, Value::Types type)
+    {
+        Value val = { sectionName, valueName, value, type };
+        settings.emplace_back(val);
+    }
+
+    void deleteSection(const char* sectionName)
+    {
+        ini.DeleteSection(sectionName);
+    }
+
+    std::string getString(const char* sectionName, const char* valueName)
+    {
+        return ini.GetSection(sectionName)->GetValue(valueName).AsString();
+    }
+
+    bool getBool(const char* sectionName, const char* valueName)
+    {
+        return ini.GetSection(sectionName)->GetValue(valueName).AsBool();
+    }
+
+    int getInt(const char* sectionName, const char* valueName)
+    {
+        return ini.GetSection(sectionName)->GetValue(valueName).AsInt();
+    }
+
+    float getFloat(const char* sectionName, const char* valueName)
+    {
+        return (float)ini.GetSection(sectionName)->GetValue(valueName).AsDouble();
+    }
+
+    void setString(const char* sectionName, const char* valueName, const char* value)
+    {
+        ini.GetSection(sectionName)->SetValue(valueName, value);
+    }
+
+    void setBool(const char* sectionName, const char* valueName, bool value)
+    {
+        ini.GetSection(sectionName)->SetValue(valueName, value);
+    }
+
+    void setInt(const char* sectionName, const char* valueName, int value)
+    {
+        ini.GetSection(sectionName)->SetValue(valueName, value);
+    }
+
+    void setFloat(const char* sectionName, const char* valueName, float value)
+    {
+        ini.GetSection(sectionName)->SetValue(valueName, value);
+    }
+
+private:
+    INI::File ini;
+    std::string iniFilename;
+    std::vector<Value> settings;
+
+};
+
+static const IniConfig::Value defaultSettings[] = {
     // Launcher settings
     { "Launcher", "swgClientName", "", IniConfig::Value::vt_string },
     { "Launcher", "swgClientPath", "", IniConfig::Value::vt_string },
@@ -46,14 +157,15 @@ const static IniConfig::Value utinniSettings[] = {
     { "Log", "writeFunctionName", "false", IniConfig::Value::vt_bool },
 };
 
-IniConfig::IniConfig() { }
-
-IniConfig::IniConfig(const std::string& filename)
+inline void utinni::IniConfig::createUtinniSettings()
 {
-    iniFilename = filename;
+    for (const Value& value : defaultSettings)
+    {
+        settings.emplace_back(value);
+    }
 }
 
-void IniConfig::load()
+inline void utinni::IniConfig::load()
 {
     if (!ini.Load(iniFilename))
     {
@@ -83,82 +195,6 @@ void IniConfig::load()
             save();
         }
     }
-}
-
-void IniConfig::load(const std::string& filename)
-{
-    iniFilename = filename;
-    load();
-}
-
-void IniConfig::save() const
-{
-    // why is this not const? :/
-    const_cast<INI::File&>(ini).Save(iniFilename);
-}
-
-void IniConfig::createUtinniSettings()
-{
-    for (const Value& value : utinniSettings)
-    {
-        settings.emplace_back(value);
-    }
-}
-
-void IniConfig::addSetting(const Value& value)
-{
-    settings.emplace_back(value);
-}
-
-void IniConfig::addSetting(const char* sectionName, const char* valueName, const char* value, Value::Types type)
-{
-    Value val = { sectionName, valueName, value, type };
-    settings.emplace_back(val);
-}
-
-void IniConfig::deleteSection(const char* sectionName)
-{
-    ini.DeleteSection(sectionName);
-}
-
-std::string IniConfig::getString(const char* sectionName, const char* valueName)
-{
-    return ini.GetSection(sectionName)->GetValue(valueName).AsString();
-}
-
-bool IniConfig::getBool(const char* sectionName, const char* valueName)
-{
-    return ini.GetSection(sectionName)->GetValue(valueName).AsBool();
-}
-
-int IniConfig::getInt(const char* sectionName, const char* valueName)
-{
-    return ini.GetSection(sectionName)->GetValue(valueName).AsInt();
-}
-
-float IniConfig::getFloat(const char* sectionName, const char* valueName)
-{
-    return (float) ini.GetSection(sectionName)->GetValue(valueName).AsDouble();
-}
-
-void IniConfig::setString(const char* sectionName, const char* valueName, const char* value)
-{
-    ini.GetSection(sectionName)->SetValue(valueName, value);
-}
-
-void IniConfig::setBool(const char* sectionName, const char* valueName, bool value)
-{
-    ini.GetSection(sectionName)->SetValue(valueName, value);
-}
-
-void IniConfig::setInt(const char* sectionName, const char* valueName, int value)
-{
-    ini.GetSection(sectionName)->SetValue(valueName, value);
-}
-
-void IniConfig::setFloat(const char* sectionName, const char* valueName, float value)
-{
-    ini.GetSection(sectionName)->SetValue(valueName, value);
 }
 
 }

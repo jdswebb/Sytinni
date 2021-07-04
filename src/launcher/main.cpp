@@ -22,7 +22,7 @@
  * SOFTWARE.
 **/
 
-#include "ini/ini.h"
+#include "ini.h"
 #include <Windows.h>
 #include <string>
 #include <TlHelp32.h>

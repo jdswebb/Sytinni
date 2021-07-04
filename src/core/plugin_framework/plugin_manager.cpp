@@ -25,7 +25,7 @@
 #include "plugin_manager.h"
 #include "utility/string_utility.h"
 #include "utility/log.h"
-#include "ini/ini.h"
+#include "ini.h"
 
 namespace utinni
 {

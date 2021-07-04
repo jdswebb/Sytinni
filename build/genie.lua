@@ -97,26 +97,13 @@ solution (SOL_NAME)
         kind "WindowedApp"
         
         defines { "BUILDING_LAUNCHER" }
-        
-        links { "ini" }
-        
+                
         includedirs {
             SYTINNI_ROOT .. "/core"
         }
         files {
             SYTINNI_ROOT .. "/launcher/**.h",
             SYTINNI_ROOT .. "/launcher/**.cpp"
-        }
-        
-    project "ini"
-        commonBuild()
-        kind "StaticLib"
-        
-        defines { "BUILDING_INI" }
-                
-        files {
-            SYTINNI_ROOT .. "/ini/**.h",
-            SYTINNI_ROOT .. "/ini/**.cpp"
         }
     
     project "utinni_core"
@@ -128,7 +115,7 @@ solution (SOL_NAME)
         libdirs { 
             EXT_ROOT .. "nvapi/x86",
         }
-        links { "ini", "nvapi" }
+        links { "nvapi" }
         
         includedirs {
             SYTINNI_ROOT .. "/core",
@@ -158,7 +145,7 @@ function addPlugin(name)
         commonBuild()
         kind "SharedLib"
                 
-        links { "utinni_core", "ini" }
+        links { "utinni_core" }
         
         includedirs {
             SYTINNI_ROOT .. "/core",
@@ -175,5 +162,5 @@ end
 for dir in io.popen( [[dir "]] .. PLUGINS_ROOT .. [[\" /b /ad]]):lines() do addPlugin(dir) end
 
 -- The default plugins added to new inis, in order of load
-project "ini"
+solution (SOL_NAME)
     defines { "DEFAULT_PLUGINS=\"sytners_toolbox\"" }

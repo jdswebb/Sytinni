@@ -34,7 +34,7 @@
 #include "swg/object/object.h"
 #include "swg/ui/imgui_impl.h"
 #include "utility/log.h"
-#include "ini/ini.h"
+#include "ini.h"
 
 namespace swg::game
 {

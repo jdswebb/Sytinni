@@ -48,13 +48,15 @@
 #include "swg/graphics/post_processing.h"
 #include "swg/scene/render_world.h"
 #include "utility/log.h"
-#include "ini/ini.h"
+#include "ini.h"
 
+namespace
+{
 std::string path;
 std::string swgOverrideCfgFilename = "utinni.cfg";
-
-static utinni::IniConfig ini;
+utinni::IniConfig ini;
 utinni::PluginManager pluginManager;
+}
 
 void createDetours()
 {

@@ -26,7 +26,7 @@
 #include "swg_utility.h"
 #include "utility/memory.h"
 #include "utility/log.h"
-#include "ini/ini.h"
+#include "ini.h"
 
 namespace swg::config
 {
