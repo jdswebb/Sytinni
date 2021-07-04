@@ -1,18 +1,43 @@
-#include "swg/graphics/directx9.h"
-#include "swg/game/game.h"
+/**
+ * MIT License
+ *
+ * Copyright (c) 2020 Philip Klatt
+ * Copyright (c) 2021 Sytner
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+**/
+
 #include "swg/camera/camera.h"
+#include "swg/game/game.h"
+#include "swg/graphics/directx9.h"
 #include "swg/graphics/graphics.h"
-#include "swg/scene/ground_scene.h"
-#include "plugin_framework/utinni_plugin.h"
-#include "swg/ui/imgui_impl.h"
+#include "swg/misc/repository.h"
 #include "swg/misc/swg_math.h"
-#include "imGuIZMO.quat/imGuIZMOquat.h"
-#include "imgui/imgui.h"
 #include "swg/object/player_object.h"
+#include "swg/scene/ground_scene.h"
 #include "swg/scene/terrain.h"
 #include "swg/scene/world_snapshot.h"
 #include "swg/ui/cui_misc.h"
-#include "swg/misc/repository.h"
+#include "swg/ui/imgui_impl.h"
+#include "imGuIZMO.quat/imGuIZMOquat.h"
+#include "imgui/imgui.h"
+#include "plugin_framework/utinni_plugin.h"
 #include <DirectXMath.h>
 
 using namespace utinni;
