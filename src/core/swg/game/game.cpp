@@ -25,7 +25,6 @@
 #include "game.h"
 #include "utinni.h"
 #include "utility/memory.h"
-#include <imgui/imgui_user.h>
 #include "swg/client/client.h"
 #include "swg/misc/config.h"
 #include "swg/scene/ground_scene.h"
