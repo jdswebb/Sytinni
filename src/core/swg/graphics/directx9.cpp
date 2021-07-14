@@ -206,6 +206,12 @@ HRESULT __stdcall hkBeginScene(LPDIRECT3DDEVICE9 pDevice)
 
 HRESULT __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice)
 {
+    //auto depthTexture = directX::getTextureResolver();
+    //if (depthTexture != nullptr && depthTexture->isSupported() && depthTexture->getTextureDepth() != nullptr)
+    //{
+    //    depthTexture->resolveDepth();
+    //}
+
     HRESULT result = endScene(pDevice);
     return result;
 }

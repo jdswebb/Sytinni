@@ -1,0 +1,271 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2021 Sytner
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+**/
+
+// Adapted from https://www.shadertoy.com/view/lsBXzD
+
+//It's also important that your Intel graphics driver settings for 3D is set to Quality,
+//as the Performance setting will likely force lower precision in the shaders.
+
+//This is mainly something you need to be aware of when using Intel GPU drivers,
+//as modern AMD or Nvidia drivers don't even have an option for lower 3D quality
+
+//A fork of https://www.shadertoy.com/view/lssGDj 
+
+/*
+To use the last few bits in a float you will need ldexp and frexp.
+
+ldexp and frexp are available in GLSL with OpenGL 4.0 and up,
+in HLSL with SM2.x and up,
+but not in OpenGL ES / WebGL.
+
+But we can make our own:
+
+float ldexp (float mantissa, float exponent)
+{
+	return exp2(exponent) * mantissa;
+}
+
+
+float frexp (float f, out float exponent)
+{
+	exponent = ceil(log2(f));
+	float mantissa = exp2(-exponent) * f;
+	return mantissa;
+}
+*/
+float character(float n, float2 p) // some compilers have the word "char" reserved
+{
+    p = floor(p * float2(8.0,-8.0) + (float2(-4.0,4.0) + float2(1.0, 1.0)) );
+
+	if (clamp(p.x, 0.0, 4.0) == p.x && clamp(p.y, 0.0, 4.0) == p.y)
+	{
+        //test values
+        //n = -(exp2(24.)-1.0); //-(2^24-1) All bits set - a white 5x5 box
+        
+        //24 bits and a multiplier (exponent)
+        //Set the highest bit and use log2 to get the exponent that could respresent that
+        //adjust the mantissa and get the remaining bits
+        
+ 
+        //p = floor(p);
+    	float x = (5.0 * p.y + p.x);
+        //x = floor(x);
+        
+
+        
+        float signbit = (n < 0.0)
+          ? 1.0 
+          : 0.0 ;
+        
+        signbit = (x == 0.0) 
+          ? signbit
+          : 0.0 ;
+        
+        
+        //Tenary Multiply exp2
+        return ( frac( abs( n*exp2(-x-1.0))) >= 0.5) ? 1.0 : signbit; //works on AMD and intel
+        
+	}	
+	
+    return 0.0;
+    
+}
+
+sampler gbuffer0 : register(s0);
+float4 texelInfo : register(c85);
+
+float4 main
+(
+	in float4 position  : POSITION0,
+	in float2 uv        : TEXCOORD0
+)
+: COLOR
+{
+	float3 col = tex2D(gbuffer0, uv + texelInfo.xy).rgb;
+    
+    //Greenscreen
+    #define graytype 4
+    
+	#if graytype == 1
+	  float luma = (col.r + col.b) * 0.5; // skip green component
+	#elif graytype == 2
+	  float luma = (col.r + col.g + col.b)/3.0;
+	#elif graytype == 3
+      float luma = dot(col,float3(0.2126, 0.7152, 0.0722));
+    #else 
+        float3 colortarget = float3(0.,255.,0.)/255.0;
+        float3 diff = col - colortarget;
+        float3 square_diff = diff * diff;
+        float3 distance_coefs = float3((0.5 * diff.r + 2.0), 4.0, (-0.5 * diff.r + 3.0));
+
+        float colordistance = 0.28 * sqrt( dot(square_diff,distance_coefs) );
+    	
+    	col = (colordistance > 0.35 ) ? col : float3(0.0, 0.0, 0.0); 
+    	float luma = dot(col,float3(0.2126, 0.7152, 0.0722));
+    
+	#endif
+    
+    
+    float gray = smoothstep(0.0,1.0,luma); //increase contrast
+    //gray = smoothstep(0.0,1.0,gray); //increase contrast
+    
+    
+    //test patterns
+    //gray = (floor(uv.x/8.0)*8.0)/iResolution.x;
+    //gray = (floor(uv.y/8.0)*8.0)/iResolution.y;
+    //gray = ((floor(uv.x/8.0)*8.0)/iResolution.x + (floor(uv.y/8.0)*8.0)/iResolution.y) *0.5; 
+    //gray = ((floor(uv.x/8.0)*8.0)/iResolution.x * (floor(uv.y/8.0)*8.0)/iResolution.y) * 1.5; 
+    
+    //maybe try levels here ?
+    
+    //float gray = luma;
+    //gray = 1.0 - gray;
+    
+/* Gradients:
+
+ .'~:;!>+=icjtJY56SXDQKHNWM
+ .':!+ijY6XbKHNM
+ .:%oO$8@#M
+ .:+j6bHM
+ .:coCO8@
+ .:oO8@
+ .:oO8
+ :+#
+
+ .:^"~cso*wSO8Q0#
+ .:^"~csoCwSO8Q0#
+ .:^"~c?o*wSO8Q0#
+
+n value // # of pixels // character
+-----------//----//-------------------
+4194304.   //  1 // . (bottom aligned) 
+131200.    //  2 // : (middle aligned) 
+4198400.   //  2 // : (bottom aligned)
+2228352.   //  3 // ;
+4325504.   //  3 // i (short)
+14336.     //  3 // - (small)
+324.       //  3 // ^
+4329476.   //  4 // i (tall)
+330.       //  4 // "
+31744.     //  5 // - (larger)
+283712.    //  5 // ~
+10627072.  //  5 // x
+145536.    //  5 // * or + (small and centered) 
+6325440.   //  6 // c (narrow - left aligned)
+12650880.  //  6 // c (narrow - center aligned)
+9738240.   //  6 // n (left aligned)
+6557772.   //  7 // s (tall)
+8679696.   //  7 // f
+4532768.   //  7 // v (1st)
+4539936.   //  7 // v (2nd)
+4207118.   //  7 // ?
+-17895696. //  7 // %
+6595776.   //  8 // o (left aligned)
+13191552.  //  8 // o (right aligned)
+14714304.  //  8 // c (wide)
+12806528.  //  9 // e (right aligned)
+332772.    //  9 // * (top aligned)
+10648704.  //  9 // * (bottom aligned)
+4357252.   //  9 // +
+-18157904. //  9 // X
+11195936.  // 10 // w
+483548.    // 10 // s (thick)
+15218734.  // 11 // S 
+31491134.  // 11 // C   
+15238702.  // 11 // C (rounded)
+22730410.  // 11 // M (more like a large m)
+10648714.  // 11 // * (larger)
+4897444.   // 11 // * (2nd larger)
+14726438.  // 11 // @ (also looks like a large e)
+23385164.  // 11 // &
+15255086.  // 12 // O
+16267326.  // 13 // S (slightly larger)
+15252014.  // 13 // 8
+15259182.  // 13 // 0  (O with dot in the middle)
+15517230.  // 13 // Q (1st)
+-18405232. // 13 // M
+-11196080. // 13 // W
+32294446.  // 14 // Q (2nd)
+15521326.  // 14 // Q (3rd)
+32298542.  // 15 // Q (4th)
+15324974.  // 15 // 0 or Ã˜
+16398526.  // 15 // $
+11512810.  // 16 // #
+-33061950. // 17 // 5 or S (stylized)
+-33193150. // 19 // $ (stylized)
+-33150782. // 19 // 0 (stylized)
+
+
+ .:*o&8@#
+
+*/
+    
+    /*
+    //Original method from movAX13h
+	//Serial - uses as many cycles as comparisons
+    //Fine as long as you keep the number of different characters low
+	//but gets expensive when you add a lot of different characters
+
+	float n =  65536.0;             // .
+	if (gray > 0.2) n = 65600.0;    // :
+	if (gray > 0.3) n = 332772.0;   // *
+	if (gray > 0.4) n = 15255086.0; // o 
+	if (gray > 0.5) n = 23385164.0; // &
+	if (gray > 0.6) n = 15252014.0; // 8
+	if (gray > 0.7) n = 13199452.0; // @
+	if (gray > 0.8) n = 11512810.0; // #
+	*/
+
+    //Conditional assignment method - expanded to use all 17 chars
+    //fast on hardware that can do this without branching (PC and Mac, unsure about mobile)
+    //TODO add Q and move space to special case like with the signbit
+    //and maybe add dithering
+    float num_of_chars = 16. ;
+    
+    float n12   = (gray < (1./num_of_chars))  ? 0.        : 4194304. ; //   or .
+	float n34   = (gray < (3./num_of_chars))  ? 131200.   : 324.     ; // : or ^
+    float n56   = (gray < (5./num_of_chars))  ? 330.      : 283712.  ; // " or ~
+    float n78   = (gray < (7./num_of_chars))  ? 12650880. : 4532768. ; // c or v
+    float n910  = (gray < (9./num_of_chars))  ? 13191552. : 10648704.; // o or *
+    float n1112 = (gray < (11./num_of_chars)) ? 11195936. : 15218734.; // w or S
+    float n1314 = (gray < (13./num_of_chars)) ? 15255086. : 15252014.; // O or 8 
+    float n1516 = (gray < (15./num_of_chars)) ? 15324974. : 11512810.; // 0 or # //forgot about Q
+    
+    float n1234     = (gray < (2./num_of_chars))  ? n12   : n34;
+    float n5678     = (gray < (6./num_of_chars))  ? n56   : n78;
+    float n9101112  = (gray < (10./num_of_chars)) ? n910  : n1112;
+    float n13141516 = (gray < (14./num_of_chars)) ? n1314 : n1516;
+    
+    float n12345678 = (gray < (4./num_of_chars)) ? n1234 : n5678;
+    float n910111213141516 = (gray < (12./num_of_chars)) ? n9101112 : n13141516;
+    
+    float n = (gray < (8./num_of_chars)) ? n12345678 : n910111213141516;
+    
+    float2 p = frac(uv * texelInfo.zw * 0.125);
+    
+    // col = pow(col,float3(0.55,0.55,0.55));
+    col = col * character(n, p);
+    
+	return float4(col,1.0);
+}

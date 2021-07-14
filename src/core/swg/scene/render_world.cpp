@@ -47,8 +47,8 @@ void __cdecl hkRender(swgptr pCamera)
 {
     swg::renderWorld::render(pCamera);
 
-    //depthTexture = directX::getDepthTexture();
-    //if (depthTexture != nullptr && depthTexture->isSupported() && depthTexture->getTexture() != nullptr)
+    //auto depthTexture = directX::getTextureResolver();
+    //if (depthTexture != nullptr && depthTexture->isSupported() && depthTexture->getTextureDepth() != nullptr)
     //{
     //    depthTexture->resolveDepth();
     //}
@@ -67,7 +67,7 @@ void __cdecl hkClearVisibleCells()
 
 void detour()
 {
-    //swg::renderWorld::render = (swg::renderWorld::pRender)Detour::Create(swg::renderWorld::render, hkRender, DETOUR_TYPE_PUSH_RET);
+    swg::renderWorld::render = (swg::renderWorld::pRender)Detour::Create(swg::renderWorld::render, hkRender, DETOUR_TYPE_PUSH_RET);
     //swg::renderWorld::clearVisibleCells = (swg::renderWorld::pClearVisibleCells)Detour::Create(swg::renderWorld::clearVisibleCells, hkClearVisibleCells, DETOUR_TYPE_PUSH_RET);
 }
 }

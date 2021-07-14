@@ -23,6 +23,7 @@
 **/
 
 #include "post_processing.h"
+#include "directx9.h"
 
 namespace swg::bloom
 {
